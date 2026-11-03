@@ -39,7 +39,7 @@ This is a **living sequence**, not a claim that every track is already implement
 
 | Phase | Planned outcome | Status |
 | --- | --- | --- |
-| 00 — Lab foundation | Personal hardware inventory, local toolchain, Git workflow, reproducibility guidelines | Not started |
+| 00 — Lab foundation | Personal Azure tenant/subscription, spending safeguards, Git workflow, secure remote development | In progress |
 | 01 — First vision inference | Run an openly licensed vision model and inspect correct outputs | Not started |
 | 02 — Model evaluation | Public/synthetic evaluation samples, baseline quality metrics and failure cases | Not started |
 | 03 — Model training | Train or fine-tune a small vision model, track experiments and compare to baseline | Not started |
@@ -52,7 +52,7 @@ This is a **living sequence**, not a claim that every track is already implement
 
 ### First practical milestone
 
-**Verify the personal laptop's OS, CPU, RAM, GPU, free storage and virtualization support before installing Docker or downloading large images.** Select the smallest technically valid model/container combination based on those results.
+**Establish a separately owned personal Azure subscription** (not linked to an employer tenant), verify billing and region/compute quotas, then select cloud compute and storage for the first vision experiment. The personal laptop is a management client only; training and model serving will run on Azure. Confirm running costs and safeguards before creating paid resources.
 
 ## Experiment documentation standard
 
@@ -87,7 +87,7 @@ The directories above describe **future structure**, not existing folders.
 
 ## Publication and responsible use
 
-- Use personal hardware/accounts and independently sourced public or synthetic material.
+- Use an independently owned personal Azure account and independently sourced public or synthetic material. The personal laptop is only used for browser, SSH, Git and remote development; ML compute is provisioned in Azure.
 - Do **not** commit customer or employer datasets, code, credentials, screenshots containing secrets, or confidential architecture.
 - Review the licenses and usage terms of every model, dataset and dependency before including or redistributing artifacts.
 - The repository's MIT license applies to original project code; it does not relicense third-party models or datasets.
