@@ -27,6 +27,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-15 | Docker prerequisites | Complete | `sudo apt install -y ca-certificates curl` succeeded; both already installed; 0 new packages, 0 upgrades |
 | I-15a | Docker keyring directory setup | Complete | `ls -ld /etc/apt/keyrings/`: `drwxr-xr-x root root`; permissions 0755 confirmed |
 | I-15b | Docker apt signing key file | Complete | `docker.asc` downloaded (3.8 KB; root; mode `0644`); GPG fingerprint matches documented Docker CE key `9DC8...0EBFCD88` |
+| I-15c | Docker official APT repository configuration | Complete | `docker.sources` inspected: stable, `noble`, `amd64`, HTTPS, `Signed-By: /etc/apt/keyrings/docker.asc` |
+| I-15d | Docker repository metadata refresh | **Pending** | Run `sudo apt update` and verify Docker repo package index is retrieved successfully |
 | I-16 | Docker Engine | **Pending** | No install / verification evidence |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
