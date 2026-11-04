@@ -41,6 +41,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17c | Triton image local size | Complete | Docker 29.9.3 `images` reports image ID `b404f7de5dbe`, disk usage 26.5 GB, content size 9.45 GB |
 | I-17c-1 | Host free space after Triton pull | Complete | `df -h /var/lib/docker` reports `/dev/root` 123G total, **28G used**, **96G available**, 23% used (before pull 2.5G used / 121G free) |
 | I-17c-2 | Triton ONNX backend image inspection | Complete | Short-lived `docker run --rm --entrypoint /bin/ls ... -la /opt/tritonserver/backends/onnxruntime` listed ONNX backend shared libraries, OpenVINO CPU plugin, test tools; backend startup not yet tested |
+| I-17e | Triton model repository directory | Complete | `mkdir -p ~/dragonstorm-lab/model_repository && ls -ld ...` confirmed path, `azureuser` ownership, mode 0775; no model loaded yet |
 | I-17d | Triton server CPU launch | **Pending** | Confirm available backends and container startup before claiming success |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
