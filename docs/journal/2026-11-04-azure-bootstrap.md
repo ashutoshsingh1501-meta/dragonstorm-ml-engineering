@@ -351,3 +351,26 @@ This message shows that your installation appears to be working correctly.
 **Outcome:** Image pulling, daemon access, container creation, and container execution have been demonstrated on the VM. The `--rm` option removes the exited container; the downloaded image normally remains cached locally. This is not yet evidence that NVIDIA Triton or an ML model works.
 
 **Next phase (pending):** Verify Docker storage and select an official NVIDIA Triton container with ONNX backend support and a CPU-compatible open-source vision model. Inspect supported image tags, prerequisites and disk requirements *before* pulling the large image. For CPU inference, avoid assuming GPU-only backends or NVIDIA drivers are available. Keep benchmark outcomes clearly labeled CPU-only.
+
+
+## 15. Docker storage usage baseline — verified
+
+The user ran:
+
+```bash
+sudo docker system df
+```
+
+Observed:
+
+```text
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          1         0         36.94kB   25.87kB (70%)
+Containers      0         0         0B        0B
+Local Volumes   0         0         0B        0B
+Build Cache     0         0         0B        0B
+```
+
+**Interpretation:** Docker currently has one small cached image and no containers, local volumes or build cache. The successful `hello-world --rm` test left no container behind. This command reports Docker-managed image/container data, **not total host disk capacity**.
+
+**Next verification pending:** `df -h /var/lib/docker` to inspect free space on the filesystem holding the standard Docker data directory (assuming Docker's root is still the default). Docker's actual root path can be confirmed later via `sudo docker info --format '{{.DockerRootDir}}'`. Do not download a large Triton image until the supported CPU-only image, ONNX backend, storage requirements and model compatibility have been checked.
