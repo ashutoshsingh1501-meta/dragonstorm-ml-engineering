@@ -971,3 +971,32 @@ triton-cpu
 **Reason:** Triton was launched with `model_control_mode=MODE_NONE` while the model repository was empty. New ONNX model and `config.pbtxt` have since been added and visually checked; Triton must be restarted to scan and load them. No actual backend/model load is yet verified. Recreate the container with `127.0.0.1:8000:8000`, no GPU, read-only host model mount; collect the returned container ID, inspect `docker ps`, logs, model readiness and inference in separate verified steps.
 
 **Cost note:** Azure auto-shutdown remains Off during this session. Manually stop/deallocate the VM before ending and confirm `Stopped (deallocated)` in Azure Portal; an SSH container stop is not a VM stop.
+
+
+## 44. Model-enabled Triton container launch request — Docker accepted, model load pending
+
+The user executed:
+
+```bash
+sudo docker run -d \\
+  --name triton-cpu \\
+  --shm-size=1g \\
+  -p 127.0.0.1:8000:8000 \\
+  -v "$HOME/dragonstorm-lab/model_repository:/models:ro" \\
+  nvcr.io/nvidia/tritonserver:26.10-py3 \\
+  tritonserver --model-repository=/models \\
+  --allow-grpc=false \\
+  --allow-metrics=false
+```
+
+Docker returned container ID:
+
+```text
+897812b33ddebe91705ba30b1f3f9d723baff19b7544e1d63e20085c5ff65afe
+```
+
+**Verified:** Docker accepted the detached container launch command and returned an ID. Unlike the earlier launch, `--rm` is omitted to **retain the container and logs after failure** for troubleshooting. The host model repository now contains model version 1's `model.onnx` (prior checksum verified) and `config.pbtxt` (contents previously inspected), mounted read-only at `/models`. The Docker port mapping binds HTTP only to the host's loopback interface, and no GPU request was made.
+
+**Unverified:** Whether container remains running, the ONNX Runtime backend loads the model, model readiness, or any successful inference. Do not equate a returned container ID with successful server initialization.
+
+**Next single command:** `sudo docker ps -a --filter name=triton-cpu`. Then inspect `sudo docker logs --tail 150 triton-cpu` (possibly longer if needed) to determine backend/model load, including any failures. For any failure, preserve logs and troubleshoot before retrying. This VM's Azure auto-shutdown remains Off; at session end verify `Stopped (deallocated)` in portal.
