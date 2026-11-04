@@ -56,6 +56,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18e | ONNX model artifact SHA-256 | Complete | Local SHA-256 exactly matches upstream metadata: `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058` |
 | I-18f | ONNX graph metadata inspection | **Pending** | Container Python `onnx` package absent; inspect host Python package / venv capabilities then create isolated model inspection environment to inspect actual tensors and opset |
 | I-18f-1 | Triton container Python ONNX parser check | Complete | `sudo docker exec triton-cpu python3 -c 'import importlib.util; ...'` printed `ONNX package installed: False`; Triton ONNX Runtime shared-library backend remains present |
+| I-18f-2 | Ubuntu Python inspection tools | Complete | Host Python 3.12.3; `pip=False`, `venv=True`, `onnx=False` via `importlib.util.find_spec`; venv creation not yet tested |
+| I-18f-3 | Isolated ONNX inspection venv creation | **Pending** | Run `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` and verify result; Ubuntu ensurepip package may be needed |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
