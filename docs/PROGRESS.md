@@ -52,7 +52,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18a | Initial model repository listing | Complete | `ls -la ~/dragonstorm-lab/model_repository` contained only `.` and `..`, confirming the directory was empty before adding any model |
 | I-18b | First ONNX detector selection | **Pending** | Verify open-source license, source files, ONNX input/output structure and CPU inference suitability before download |
 | I-18c | First ONNX model versioned directory | Complete | `mkdir -p ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1 && ls -ld ...` verified `/home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1`, owner/group `azureuser`, mode 0775; model binary not downloaded |
-| I-18d | ONNX model artifact download | **Pending** | Download exact file from authoritative source, verify URL and record SHA-256 before model configuration |
+| I-18d | ONNX model artifact download | Complete (integrity pending) | `curl --fail --location --show-error --output .../ssd_mobilenet_v1_12/1/model.onnx` transferred about 28.0 MiB from the ONNX Model Zoo Hugging Face resolve URL without reported errors; SHA-256 not yet checked |
+| I-18e | ONNX model artifact SHA-256 | **Pending** | Run `sha256sum ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx` and compare with upstream published checksum |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
