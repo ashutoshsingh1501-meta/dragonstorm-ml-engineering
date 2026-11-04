@@ -374,3 +374,23 @@ Build Cache     0         0         0B        0B
 **Interpretation:** Docker currently has one small cached image and no containers, local volumes or build cache. The successful `hello-world --rm` test left no container behind. This command reports Docker-managed image/container data, **not total host disk capacity**.
 
 **Next verification pending:** `df -h /var/lib/docker` to inspect free space on the filesystem holding the standard Docker data directory (assuming Docker's root is still the default). Docker's actual root path can be confirmed later via `sudo docker info --format '{{.DockerRootDir}}'`. Do not download a large Triton image until the supported CPU-only image, ONNX backend, storage requirements and model compatibility have been checked.
+
+
+## 16. Docker backing filesystem free-space check — verified
+
+The user executed:
+
+```bash
+df -h /var/lib/docker
+```
+
+Observed output:
+
+```text
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       123G  2.5G  121G   3% /
+```
+
+**Interpretation:** The filesystem containing `/var/lib/docker` is the root ext4 volume, with **121 GiB reported available** and only **3% used** at this checkpoint. This represents host filesystem headroom, not Docker-specific image usage; the last `docker system df` check reported only one tiny cached test image.
+
+**Pending verification:** Query `sudo docker info --format '{{.DockerRootDir}}'` for Docker's configured data root before making assumptions about where all Docker data is stored. Newer Docker installations may also store image data through containerd; inspect filesystem use before pulling large runtime images. No Triton image has been pulled.
