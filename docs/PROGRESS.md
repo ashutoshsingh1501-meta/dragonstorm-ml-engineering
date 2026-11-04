@@ -31,7 +31,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-15d | Docker repository metadata refresh | Complete | `sudo apt update` fetched Docker `noble InRelease` (48.5 KB) and `noble/stable amd64 Packages` (73.4 KB) without errors |
 | I-16 | Docker Engine packages | Complete | 7 packages installed via Docker official APT repo; Docker CE/CLI 29.9.3, containerd 2.4.2, Buildx 0.38.1, Compose 5.7.0 |
 | I-16a | Docker daemon and CLI communication | Complete | `sudo docker version` returned both Client and Server 29.9.3 (API 1.56), linux/amd64; containerd 2.4.2, runc 1.5.2 |
-| I-16b | First Docker test container | **Pending** | Run `sudo docker run --rm hello-world` and inspect successful output |
+| I-16b | First Docker test container | Complete | `sudo docker run --rm hello-world` pulled official amd64 image, printed `Hello from Docker!`, exited successfully; `--rm` cleaned up container |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
