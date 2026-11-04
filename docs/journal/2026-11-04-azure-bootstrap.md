@@ -244,3 +244,24 @@ Signed-By: /etc/apt/keyrings/docker.asc
 ```
 
 **Result:** The repository configuration is correctly formed for Ubuntu 24.04 (`noble`) on x86-64 and refers to the previously verified Docker signing key. **Pending:** `sudo apt update` to confirm that APT can fetch repository metadata and validate signatures. Docker Engine has not yet been installed.
+
+
+## 11. Docker repository connectivity — verified
+
+The user executed:
+
+```bash
+sudo apt update
+```
+
+Observed output included:
+
+```text
+Get:5 https://download.docker.com/linux/ubuntu noble InRelease [48.5 kB]
+Get:6 https://download.docker.com/linux/ubuntu noble/stable amd64 Packages [73.4 kB]
+Fetched 122 kB
+Reading package lists... Done
+All packages are up to date.
+```
+
+**Outcome:** Docker APT metadata was fetched successfully, with no signature or repository errors reported. This verifies package-source connectivity, **not Docker Engine installation**. Next proposed command will show the package installation plan and confirmation prompt for official Docker Engine components: `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin`, and `docker-compose-plugin`.
