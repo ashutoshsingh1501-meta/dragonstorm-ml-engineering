@@ -67,7 +67,9 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18j | Controlled stop of empty Triton server | Complete | `sudo docker stop triton-cpu` returned `triton-cpu` successfully; stopped before model-enabled relaunch; auto-removal expected via `--rm` but not independently checked |
 | I-18k | First model-enabled Triton launch | Complete (container ID returned) | `sudo docker run -d --name triton-cpu ...` returned container ID `897812b33dde...65afe`; no `--rm`, port bound to 127.0.0.1:8000, model repository mounted read-only, no GPU requested; running state and model load still pending |
 | I-18l | Verify model-enabled container status | Complete | `sudo docker ps -a --filter name=triton-cpu` shows ID `897812b33dde`, Up 3 minutes, `127.0.0.1:8000->8000/tcp`; backend/model readiness still unverified |
-| I-18l-1 | Verify model-enabled startup logs | **Pending** | Inspect `sudo docker logs --tail 150 triton-cpu`; determine ONNX backend and `ssd_mobilenet_v1_12` loading state |
+| I-18l-1 | Verify model-enabled startup logs | Complete | `sudo docker logs --tail 150 triton-cpu` confirms `TRITONBACKEND_Initialize: onnxruntime`, instance initialized on `CPU device 0`, `successfully loaded 'ssd_mobilenet_v1_12'`, model 1 READY, HTTPService started |
+| I-18m-1 | Check model-specific HTTP readiness | **Pending** | Query `curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready` and verify actual status |
+| I-18m-2 | Model inference functional test | **Pending** | Perform real CPU inference with controlled image tensor, verify prediction tensors and output interpretation; not established by startup logs |
 | I-18m | Verify ONNX CPU model load | **Pending** | Inspect Triton logs, then model-specific readiness and actual inference separately |
 | I-18f-4 | Install Ubuntu Python 3.12 venv support | Complete | `sudo apt install -y python3.12-venv`: installed python3.12-venv 3.12.3-1ubuntu0.17, python3-pip-whl 24.0+dfsg-1ubuntu1.3, python3-setuptools-whl 68.1.2-2ubuntu1.2; no containers require restart |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
