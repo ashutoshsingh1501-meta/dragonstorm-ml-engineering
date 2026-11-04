@@ -455,3 +455,23 @@ nvcr.io/nvidia/tritonserver:26.10-py3
 **Verified:** The official NVIDIA NGC Triton 26.10 image has been pulled to the Docker host. The immutable digest provides precise artifact provenance. **Not yet verified:** actual locally reported image size and disk impact, CPU-only container startup, ONNX Runtime backend loading, or any model inference.
 
 **Next proposed command:** `sudo docker images nvcr.io/nvidia/tritonserver:26.10-py3`. Follow up with host storage and backend checks before launching the server. This is not evidence of a running Triton process or a loaded vision model.
+
+
+## 20. Triton image size in Docker — verified
+
+After the NVIDIA Triton 26.10 image pull, the user ran:
+
+```bash
+sudo docker images nvcr.io/nvidia/tritonserver:26.10-py3
+```
+
+Observed Docker 29.9.3 output:
+
+```text
+IMAGE                                   ID             DISK USAGE   CONTENT SIZE
+nvcr.io/nvidia/tritonserver:26.10-py3   b404f7de5dbe       26.5GB         9.45GB
+```
+
+**Outcome:** The local image is present; Docker reports **26.5 GB disk usage** and **9.45 GB content size**. These are Docker-reported image metrics and should not be treated as a precise measurement of the difference in physical filesystem occupancy. That difference will be measured by comparing host filesystem use before and after via `df -h /var/lib/docker`. The earlier pre-pull backing filesystem showed **121 GiB available**; post-pull check is still pending.
+
+**Not yet demonstrated:** the image can launch without a GPU, the ONNX Runtime backend exists and loads, or inference works.
