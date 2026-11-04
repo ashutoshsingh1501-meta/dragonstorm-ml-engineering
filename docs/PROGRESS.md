@@ -59,7 +59,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18f-2 | Ubuntu Python inspection tools | Complete | Host Python 3.12.3; `pip=False`, `venv=True`, `onnx=False` via `importlib.util.find_spec`; venv creation not yet tested |
 | I-18f-3 | Isolated ONNX inspection venv creation | Complete (operational check pending) | After `python3.12-venv` installation, user ran `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` twice; both returned to prompt without error/output; interpreter and pip verification pending |
 | I-18f-5 | Verify isolated Python and pip | Complete | `~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip --version` returned `pip 24.0` from venv-local `lib/python3.12/site-packages/pip` |
-| I-18f-6 | Install isolated ONNX parser | **Pending** | Install pinned ONNX parser in `.venv-onnx-inspect` without modifying host system Python or Triton container |
+| I-18f-6 | Install isolated ONNX parser | Complete | `.venv-onnx-inspect/bin/python -m pip install 'onnx==1.19.1'` succeeded; installed onnx 1.19.1, numpy 2.5.4, protobuf 7.36.2, ml_dtypes 0.6.0, typing_extensions 4.16.0 |
+| I-18f-7 | Inspect ONNX graph and validate schema | **Pending** | Use isolated `onnx` parser against verified `model.onnx`; report graph inputs/outputs, tensor element types and dimensions, opset, and model checker outcome |
 | I-18f-4 | Install Ubuntu Python 3.12 venv support | Complete | `sudo apt install -y python3.12-venv`: installed python3.12-venv 3.12.3-1ubuntu0.17, python3-pip-whl 24.0+dfsg-1ubuntu1.3, python3-setuptools-whl 68.1.2-2ubuntu1.2; no containers require restart |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
