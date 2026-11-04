@@ -1000,3 +1000,23 @@ Docker returned container ID:
 **Unverified:** Whether container remains running, the ONNX Runtime backend loads the model, model readiness, or any successful inference. Do not equate a returned container ID with successful server initialization.
 
 **Next single command:** `sudo docker ps -a --filter name=triton-cpu`. Then inspect `sudo docker logs --tail 150 triton-cpu` (possibly longer if needed) to determine backend/model load, including any failures. For any failure, preserve logs and troubleshoot before retrying. This VM's Azure auto-shutdown remains Off; at session end verify `Stopped (deallocated)` in portal.
+
+
+## 45. Model-enabled Triton container running state — verified
+
+The user ran:
+
+```bash
+sudo docker ps -a --filter name=triton-cpu
+```
+
+Observed output:
+
+```text
+CONTAINER ID   IMAGE                                   COMMAND                  CREATED         STATUS         PORTS                      NAMES
+897812b33dde   nvcr.io/nvidia/tritonserver:26.10-py3   "/opt/nvidia/nvidia_…"   3 minutes ago   Up 3 minutes   127.0.0.1:8000->8000/tcp   triton-cpu
+```
+
+**Verified:** The new container (full ID from previous launch: `897812b33ddebe91705ba30b1f3f9d723baff19b7544e1d63e20085c5ff65afe`) remained running 3 minutes after being launched with an ONNX model repository, and Docker published HTTP to the VM's loopback interface only. This does **not** prove the ONNX Runtime backend has loaded the model, that model readiness is true, or that inference is working. The new container deliberately omits `--rm` so logs remain available if the process fails.
+
+**Next verification pending:** Run `sudo docker logs --tail 150 triton-cpu` and inspect actual Triton/model/backend initialization messages, including any errors. If logs indicate a loaded model, still separately check model-specific readiness and actual inference. Keep host-side endpoints local, and remember the Azure VM currently requires manual Stop (deallocate) at session end.
