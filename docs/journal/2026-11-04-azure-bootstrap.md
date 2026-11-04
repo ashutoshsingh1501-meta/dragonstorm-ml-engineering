@@ -563,3 +563,23 @@ Observed Docker command returned container ID:
 **Verified:** Docker accepted the detached container creation/start command and returned a container ID. The configuration requests no GPU, mounts the previously created local model repository read-only at `/models`, binds Triton HTTP to the **host loopback interface only** (`127.0.0.1:8000`), disables gRPC/metrics, and provisions a 1 GiB shared-memory area. The `--rm` flag automatically cleans up the container when it stops.
 
 **Crucial limitation:** A container ID alone does **not** establish that Triton is still running, initialized or healthy. No model was loaded or inference observed. Next run `sudo docker ps -a --filter name=triton-cpu` to check state, then inspect logs and the local health endpoint. If `--rm` already deleted an exited container, rerun without `--rm` for troubleshooting after examining the status.
+
+
+## 25. Triton CPU-only container running state — verified
+
+The user executed:
+
+```bash
+sudo docker ps -a --filter name=triton-cpu
+```
+
+Observed:
+
+```text
+CONTAINER ID   IMAGE                                   COMMAND                  CREATED         STATUS         PORTS                      NAMES
+4cac76c7c2b6   nvcr.io/nvidia/tritonserver:26.10-py3   "/opt/nvidia/nvidia_…"   2 minutes ago   Up 2 minutes   127.0.0.1:8000->8000/tcp   triton-cpu
+```
+
+**Verified:** Docker reported that the container remained running two minutes after its detached launch. The Triton HTTP container port 8000 was published to **host loopback only**. No GPU was requested in the launch command. However, `docker ps` does not prove the Triton binary is initialized, its ONNX backend can load models, or the HTTP health endpoint is ready.
+
+**Next single command (pending):** `sudo docker logs --tail 100 triton-cpu` to examine startup, any CPU/GPU warnings and model repository scanning. Health endpoint check follows separately.
