@@ -25,6 +25,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-14a | Temporary auto-shutdown change | Complete | Azure VM Auto-shutdown page shows Off; Overview shows Not configured; VM Running |
 | I-14b | End-of-session manual deallocation | **Pending** | Must confirm `Stopped (deallocated)` in Azure after lab session; compute charges continue while Running |
 | I-15 | Docker prerequisites | Complete | `sudo apt install -y ca-certificates curl` succeeded; both already installed; 0 new packages, 0 upgrades |
+| I-15a | Docker keyring directory setup | **Verification pending** | `sudo install -m 0755 -d /etc/apt/keyrings` executed twice, returned to shell prompt without error; awaiting `ls -ld` |
 | I-16 | Docker Engine | **Pending** | No install / verification evidence |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
