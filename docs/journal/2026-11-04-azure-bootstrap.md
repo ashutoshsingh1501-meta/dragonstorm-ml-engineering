@@ -536,3 +536,30 @@ drwxrwxr-x 2 azureuser azureuser 4096 Nov  4 16:13 /home/azureuser/dragonstorm-l
 **Verified:** The local model repository path exists, is owned by `azureuser` and has mode `0775`. No model was placed in it during this step. The directory listing alone does not prove the directory is empty, only that the directory itself exists.
 
 **Next planned experiment:** Launch the already-downloaded `nvcr.io/nvidia/tritonserver:26.10-py3` container without a GPU, mount the model directory read-only at `/models`, and bind the Triton HTTP port only to `127.0.0.1` on the Azure VM. Startup and health will need separate observation. The image's ONNX backend files were previously inspected but no actual model has been loaded.
+
+
+## 24. Triton CPU-only container launch request — accepted (server status pending)
+
+The user ran:
+
+```bash
+sudo docker run -d --rm \\
+  --name triton-cpu \\
+  --shm-size=1g \\
+  -p 127.0.0.1:8000:8000 \\
+  -v "$HOME/dragonstorm-lab/model_repository:/models:ro" \\
+  nvcr.io/nvidia/tritonserver:26.10-py3 \\
+  tritonserver --model-repository=/models \\
+  --allow-grpc=false \\
+  --allow-metrics=false
+```
+
+Observed Docker command returned container ID:
+
+```text
+4cac76c7c2b6c2f1b95f70ecd59c9b102f04c0a2c1b7f0bf01e9732f47933081
+```
+
+**Verified:** Docker accepted the detached container creation/start command and returned a container ID. The configuration requests no GPU, mounts the previously created local model repository read-only at `/models`, binds Triton HTTP to the **host loopback interface only** (`127.0.0.1:8000`), disables gRPC/metrics, and provisions a 1 GiB shared-memory area. The `--rm` flag automatically cleans up the container when it stops.
+
+**Crucial limitation:** A container ID alone does **not** establish that Triton is still running, initialized or healthy. No model was loaded or inference observed. Next run `sudo docker ps -a --filter name=triton-cpu` to check state, then inspect logs and the local health endpoint. If `--rm` already deleted an exited container, rerun without `--rm` for troubleshooting after examining the status.
