@@ -6,7 +6,7 @@ A public, hands-on learning and engineering journal exploring the complete lifec
 
 This repository is **an independent greenfield lab**. It uses original code, open-source tooling, and public or synthetic data. It is not a reconstruction of any employer's proprietary systems.
 
-> **Current stage (November 2026):** Repository and documentation initialization. No model training, inference service, or performance benchmark has yet been completed in this repository.
+> **Current stage (2026-11-04):** Personal Azure Ubuntu VM deployed; restricted SSH connectivity verified; CPU/RAM/storage checked; Ubuntu security and maintenance updates applied. Docker Engine, NVIDIA Triton, model inference, and performance benchmarks have **not yet** been completed.
 
 ## Why this project?
 
@@ -54,6 +54,16 @@ This is a **living sequence**, not a claim that every track is already implement
 
 **Establish a separately owned personal Azure subscription** (not linked to an employer tenant), verify billing and region/compute quotas, then select cloud compute and storage for the first vision experiment. The personal laptop is a management client only; training and model serving will run on Azure. Confirm running costs and safeguards before creating paid resources.
 
+## Verified hands-on progress
+
+Documentation is updated **after each verified action or small reproducible checkpoint**, never before execution. Failures and resolved blockers are first-class learning outcomes.
+
+- [Live milestone tracker](docs/PROGRESS.md)
+- [2026-11-04 Azure VM and Ubuntu bootstrap journal](docs/journal/2026-11-04-azure-bootstrap.md)
+- [ADR-001: Personal Azure cloud-first lab architecture](docs/decisions/ADR-001-personal-azure-cloud-first.md)
+
+Next proposed action: install Docker repository prerequisites; it is **pending**, not completed.
+
 ## Experiment documentation standard
 
 Every meaningful experiment will record:
@@ -83,7 +93,7 @@ scripts/                # Repeatable setup, validation and load-test scripts
 tests/                  # Unit, integration and evaluation tests
 ```
 
-The directories above describe **future structure**, not existing folders.
+Some documentation directories now exist (for example `docs/journal` and `docs/decisions`); source, model, test and script directories will be added incrementally as real experiments begin.
 
 ## Publication and responsible use
 
