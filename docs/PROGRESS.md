@@ -69,7 +69,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18l | Verify model-enabled container status | Complete | `sudo docker ps -a --filter name=triton-cpu` shows ID `897812b33dde`, Up 3 minutes, `127.0.0.1:8000->8000/tcp`; backend/model readiness still unverified |
 | I-18l-1 | Verify model-enabled startup logs | Complete | `sudo docker logs --tail 150 triton-cpu` confirms `TRITONBACKEND_Initialize: onnxruntime`, instance initialized on `CPU device 0`, `successfully loaded 'ssd_mobilenet_v1_12'`, model 1 READY, HTTPService started |
 | I-18m-1 | Check model-specific HTTP readiness | Complete | `curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready` returned `HTTP/1.1 200 OK`, Content-Length: 0; model ready on localhost; no inference completed |
-| I-18n | End-of-session Azure VM deallocation | **Pending user verification** | Azure auto-shutdown Off; user must Stop VM in Portal and verify `Stopped (deallocated)`; not yet confirmed |
+| I-18n | End-of-session Azure VM deallocation | Complete | User-supplied Azure Portal Overview screenshot explicitly shows `vm-dragonstorm-ml-01` status **Stopped (deallocated)**; compute deallocation verified for end of Day 1; Azure disk/network costs may persist |
 | I-18m-2 | Model inference functional test | **Pending** | Perform real CPU inference with controlled image tensor, verify prediction tensors and output interpretation; not established by startup logs |
 | I-18m | Verify ONNX CPU model load | **Pending** | Inspect Triton logs, then model-specific readiness and actual inference separately |
 | I-18f-4 | Install Ubuntu Python 3.12 venv support | Complete | `sudo apt install -y python3.12-venv`: installed python3.12-venv 3.12.3-1ubuntu0.17, python3-pip-whl 24.0+dfsg-1ubuntu1.3, python3-setuptools-whl 68.1.2-2ubuntu1.2; no containers require restart |
@@ -79,7 +79,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 - Independently verify the SSH host key fingerprint via a trusted out-of-band channel; the first SSH host key was accepted before this verification.
 - Verify active network rule and power state before each remote connection; public client IP may change.
-- **Temporary cost-control exception (2026-11-04):** Auto-shutdown is Off for today's installation/testing. Manual Stop + verified `Stopped (deallocated)` is required before finishing; restoring an automatic schedule afterward is recommended.
+- **2026-11-04 shutdown verified:** Azure Portal screenshot confirms VM `vm-dragonstorm-ml-01` reached **Stopped (deallocated)** after the session. Auto-shutdown was left Off during testing; re-enable automatic shutdown before subsequent unattended use. Storage and certain network resources can still incur cost.
 - Reassess image backend support, actual container size, and cost prior to downloading Triton.
 - Keep GPU provisioning separate; current deployment is CPU-only.
 
