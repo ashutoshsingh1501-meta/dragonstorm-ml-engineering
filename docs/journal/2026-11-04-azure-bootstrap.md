@@ -1055,3 +1055,26 @@ There was also a **nonfatal ONNX Runtime PCI device-discovery warning** from `de
 **Verified:** The actual ONNX Runtime Triton backend initialized; the SSD-MobileNetV1-12 ONNX model version 1 loaded successfully; Triton explicitly reported a CPU instance and model state `READY`. The startup logs show Triton HTTP service started in the container. This is the first verified functional *model loading* milestone, not an inference correctness result.
 
 **Not yet verified:** Model-specific HTTP readiness after initialization; Tensor inference requests; model outputs and detection accuracy; performance, batching or concurrency. The container's internal listener `0.0.0.0:8000` remains mapped by Docker to host `127.0.0.1:8000` only. The next single user action is to query `/v2/models/ssd_mobilenet_v1_12/ready` with curl, then prepare a controlled test image tensor and inference client.
+
+
+## 47. SSD-MobileNet model-specific HTTP readiness — verified; end-of-session Azure shutdown still pending
+
+User executed on the personal Azure Ubuntu VM:
+
+```bash
+curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready
+```
+
+Observed response:
+
+```http
+HTTP/1.1 200 OK
+Content-Length: 0
+Content-Type: text/plain
+```
+
+**Verified:** Triton 2.74.0 responded with HTTP 200 to the **model-specific** V2 readiness request for `ssd_mobilenet_v1_12`, supplementing previous logs that established `onnxruntime` backend, `CPU device 0` model instance, successful model version 1 load and `READY` in the model table. This is model-readiness evidence, **not a model inference or object detection correctness result**.
+
+**Session stopping point — 2026-11-04 (user elected to pause):** The user asked whether to end for today; recommendation is to pause now, before making any inference request. **Next learning checkpoint:** Resume VM and container, then prepare/send a deterministic test input to Triton's localhost V2 inference endpoint, inspect all four outputs, and eventually validate image preprocessing, bounding boxes and classes. No predictions, benchmarking, or dynamic batching have been observed to date.
+
+**Critical Azure cost-control action — NOT YET VERIFIED:** Auto-shutdown for `vm-dragonstorm-ml-01` is Off. The user must use Azure Portal VM **Stop** (deallocate) and wait for `Stopped (deallocated)` to appear. Do not mark the VM as deallocated merely because the user said they would stop, or from closing SSH. VM OS disk continues to incur storage charges, but deallocation stops VM compute billing. The existing Triton container was launched without `--rm` and without a restart policy; on the next VM boot, it will normally remain on disk in an exited state and can be resumed with `sudo docker start triton-cpu`, followed by status/readiness checks.
