@@ -417,3 +417,20 @@ Actual output:
 - https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
 
 No Triton image download has occurred. Estimated decompressed image, disk/temp consumption and actual runtime resource usage still require observation after pulling. GPU-based backends must not be assumed operational on this CPU-only VM.
+
+
+## 18. Triton registry image manifest access — verified
+
+The user executed:
+
+```bash
+sudo docker manifest inspect nvcr.io/nvidia/tritonserver:26.10-py3 > /dev/null && echo "TRITON IMAGE TAG ACCESSIBLE"
+```
+
+Observed output:
+
+```text
+TRITON IMAGE TAG ACCESSIBLE
+```
+
+**Outcome:** The Azure VM can access the NVIDIA NGC registry manifest for the specified image tag. This command **did not download the image** and does not establish that the container starts or that ONNX CPU inference succeeds. The planned next action is to pull this image, accounting for its large compressed and unpacked sizes. At the prior disk check, the host reported **121 GiB** available. Preserve the evidence of actual image download, size, launch, and backend verification separately.
