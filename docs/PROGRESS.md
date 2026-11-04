@@ -49,7 +49,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17d-4 | Triton HTTP health | Complete | `curl -i --max-time 5 http://127.0.0.1:8000/v2/health/ready`: `HTTP/1.1 200 OK`, Content-Length: 0; Triton readiness verified, no inference tested |
 | I-17d-4 | Triton HTTP health | **Pending** | Inspect localhost `/v2/health/ready` after logs confirm startup |
 | I-17d-5 | Triton v2 metadata endpoint | Complete | `curl -sS http://127.0.0.1:8000/v2` returned name `triton`, version `2.74.0`, and V2 extensions including model_repository, model_configuration, statistics and schedule_policy |
-| I-18a | Initial model repository listing | **Pending** | Inspect exact contents before preparing object-detection model structure |
+| I-18a | Initial model repository listing | Complete | `ls -la ~/dragonstorm-lab/model_repository` contained only `.` and `..`, confirming the directory was empty before adding any model |
+| I-18b | First ONNX detector selection | **Pending** | Verify open-source license, source files, ONNX input/output structure and CPU inference suitability before download |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
