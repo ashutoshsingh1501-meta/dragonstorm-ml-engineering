@@ -656,3 +656,24 @@ User-reported response:
 **Verified:** The locally running CPU-only Triton service responds to the V2 server metadata API and identifies itself as Triton **2.74.0**. It advertises listed protocol extensions, including model repository management/configuration, schedule policy and request statistics. **Not yet verified:** actual model loading, ONNX Runtime execution, dynamic batching behavior, throughput, or correct prediction outputs. Advertised extension presence is not proof that individual performance features have been exercised.
 
 **Next pending validation:** Inspect `~/dragonstorm-lab/model_repository` and start preparing a license-checked open-source ONNX object detection model with input/output tensors and CPU device support verified before serving. The Triton container was launched with a read-only bind mount, so changes made to the host repository can be recognized only under supported model loading modes; default `MODE_NONE` startup reads models at initialization. Plan for a controlled restart to load new models and check readiness/logs afterward.
+
+
+## 29. Clean Triton model repository — verified
+
+The user executed:
+
+```bash
+ls -la ~/dragonstorm-lab/model_repository
+```
+
+Observed output:
+
+```text
+total 8
+drwxrwxr-x 2 azureuser azureuser 4096 Nov  4 16:13 .
+drwxrwxr-x 3 azureuser azureuser 4096 Nov  4 16:13 ..
+```
+
+**Verified:** The Triton model repository was empty when inspected (only the `.` and `..` directory entries). No ONNX model, version folder or `config.pbtxt` has been added yet.
+
+**Next planned task:** Select and independently verify a legitimate permissively licensed object-detection ONNX model with known input tensor shape, output parsing and CPU compatibility before creating its Triton repository layout. The running Triton instance uses `MODE_NONE`; new models will require a controlled restart to load. Maintain one verified user action per turn and document completed steps in GitHub.
