@@ -187,3 +187,20 @@ sudo apt install -y ca-certificates curl
 4. Distinguish **guest-observed usable resources** from Azure's provisioned SKU specifications.
 5. Security and cost are experiment dimensions: record controlled access, resource lifetimes, and deallocation practices.
 6. Maintain verifiable evidence; don't extrapolate GPU results from a CPU-only VM.
+
+
+## 8. Docker apt keyring directory — command executed, verification pending
+
+The user ran the following command **twice** from the Ubuntu shell:
+
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+```
+
+It returned to the shell prompt each time without output or reported errors. Silent success is normal for `install -d`; repeating the command is harmless. The next action is to check the directory and its permissions using:
+
+```bash
+ls -ld /etc/apt/keyrings
+```
+
+**Verification pending:** The actual directory listing has not yet been observed. Docker's GPG key and apt repository have not yet been configured.
