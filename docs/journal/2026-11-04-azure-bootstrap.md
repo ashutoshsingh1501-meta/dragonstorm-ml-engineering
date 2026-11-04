@@ -711,3 +711,22 @@ curl --fail --location --show-error \\
 Observed curl transfer output showed an initial **1,072-byte** response followed by a **28.0M** transfer, with no error and a returned shell prompt. With `--location`, this is consistent with following the model host's redirect and downloading the model artifact. The target path is version 1's standard Triton filename `model.onnx`.
 
 **Evidence boundary:** Curl reported a successful download; exact file integrity, actual local file size and graph compatibility have **not yet been independently verified**. No Triton inference performed. The next verification must run SHA-256 on the local artifact and compare to the upstream model-file metadata (expected `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058` as documented in `docs/models/ssd-mobilenetv1-12-source-notes.md`). Do not restart Triton until model graph and `config.pbtxt` are validated.
+
+
+## 32. SSD-MobileNet ONNX artifact SHA-256 integrity — verified
+
+On the Azure Ubuntu VM the user executed:
+
+```bash
+sha256sum ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx
+```
+
+Observed output:
+
+```text
+b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058  /home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx
+```
+
+**Verified:** The local `model.onnx` checksum **exactly matches** the previously recorded upstream ONNX Model Zoo / Hugging Face expected SHA-256 `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058`. This verifies the binary's byte integrity relative to that upstream digest; it does **not** guarantee model safety, graph compatibility, or inference correctness. No model has been loaded by Triton yet.
+
+**Next:** Inspect the actual ONNX graph input/output names, dtypes and shapes, and opset using an ONNX parser inside an isolated environment. The existing Triton container has the model repository mounted read-only. If the container lacks the Python `onnx` package, check first and choose a bounded reproducible alternative rather than modifying the running Triton environment.
