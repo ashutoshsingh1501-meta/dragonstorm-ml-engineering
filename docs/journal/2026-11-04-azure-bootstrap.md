@@ -434,3 +434,24 @@ TRITON IMAGE TAG ACCESSIBLE
 ```
 
 **Outcome:** The Azure VM can access the NVIDIA NGC registry manifest for the specified image tag. This command **did not download the image** and does not establish that the container starts or that ONNX CPU inference succeeds. The planned next action is to pull this image, accounting for its large compressed and unpacked sizes. At the prior disk check, the host reported **121 GiB** available. Preserve the evidence of actual image download, size, launch, and backend verification separately.
+
+
+## 19. NVIDIA Triton image pull — completed
+
+The user ran:
+
+```bash
+sudo docker pull nvcr.io/nvidia/tritonserver:26.10-py3
+```
+
+All reported layers finished downloading (`Pull complete`). Final output:
+
+```text
+Digest: sha256:b404f7de5dbeeefe0b17d7d149745a50d0989a25d0d831433b5ba63c716c2fcd
+Status: Downloaded newer image for nvcr.io/nvidia/tritonserver:26.10-py3
+nvcr.io/nvidia/tritonserver:26.10-py3
+```
+
+**Verified:** The official NVIDIA NGC Triton 26.10 image has been pulled to the Docker host. The immutable digest provides precise artifact provenance. **Not yet verified:** actual locally reported image size and disk impact, CPU-only container startup, ONNX Runtime backend loading, or any model inference.
+
+**Next proposed command:** `sudo docker images nvcr.io/nvidia/tritonserver:26.10-py3`. Follow up with host storage and backend checks before launching the server. This is not evidence of a running Triton process or a loaded vision model.
