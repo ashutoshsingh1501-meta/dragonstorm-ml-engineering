@@ -298,3 +298,29 @@ sudo docker version
 ```
 
 Check both **Client** and **Server** sections; only then record daemon/CLI connectivity as verified. No container has been run and NVIDIA Triton has not yet been installed.
+
+
+## 13. Docker daemon and CLI communication — verified
+
+Executed from Ubuntu SSH terminal:
+
+```bash
+sudo docker version
+```
+
+Observed client and server details:
+
+| Component | Reported value |
+| --- | --- |
+| Docker Client | Docker Engine - Community 29.9.3 |
+| Docker Server | Docker Engine - Community 29.9.3 |
+| API | 1.56 (server minimum 1.40) |
+| OS/architecture | linux/amd64 |
+| containerd | v2.4.2 |
+| runc | 1.5.2 |
+| docker-init | 0.19.0 |
+| Experimental | false |
+
+**Result:** Both Client and Server sections are present; the Docker CLI can communicate with the running daemon. This verifies runtime connectivity, not successful execution of a container.
+
+**Next proposed action, pending:** `sudo docker run --rm hello-world`. This downloads a small public test image if necessary, runs a container, and removes the container on exit; the image remains cached until explicitly removed.
