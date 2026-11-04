@@ -583,3 +583,32 @@ CONTAINER ID   IMAGE                                   COMMAND                  
 **Verified:** Docker reported that the container remained running two minutes after its detached launch. The Triton HTTP container port 8000 was published to **host loopback only**. No GPU was requested in the launch command. However, `docker ps` does not prove the Triton binary is initialized, its ONNX backend can load models, or the HTTP health endpoint is ready.
 
 **Next single command (pending):** `sudo docker logs --tail 100 triton-cpu` to examine startup, any CPU/GPU warnings and model repository scanning. Health endpoint check follows separately.
+
+
+## 26. Triton CPU startup logs — verified; HTTP readiness pending
+
+User command:
+
+```bash
+sudo docker logs --tail 100 triton-cpu
+```
+
+Selected observed output:
+
+```text
+NVIDIA Release 26.10 (build 77056645)
+Triton Server Version 2.74.0
+WARNING: The NVIDIA Driver was not detected. GPU functionality will not be available.
+I1104 16:16:00.666655 1 cuda_memory_manager.cc:117] "CUDA memory pool disabled"
+W1104 16:16:00.666613 1 pinned_memory_manager.cc:273] "Unable to allocate pinned system memory, pinned memory pool will not be available: CUDA driver version is insufficient for CUDA runtime version"
+E1104 16:16:00.666832 1 server.cc:248] "CudaDriverHelper has not been initialized."
+...
+model_repository_path[0]         /models
+strict_readiness                 1
+...
+I1104 16:16:00.667515 1 http_server.cc:5022] "Started HTTPService at 0.0.0.0:8000"
+```
+
+Backend and Model tables in the startup logs contained **no entries**. This is consistent with having placed no models in the model repository. The message `Started HTTPService` supports that the Triton HTTP listener started despite nonfatal GPU/CUDA initialization warnings. These logs alone do not prove the HTTP readiness check responds successfully or that any ONNX Runtime inference will work. The `0.0.0.0:8000` bind address is inside the container, whereas `docker ps` previously verified host publication at `127.0.0.1:8000` only.
+
+**Pending next user verification:** `curl -i --max-time 5 http://127.0.0.1:8000/v2/health/ready`. Readiness status should be recorded exactly, including any failure; no loaded-model inference has yet been demonstrated.
