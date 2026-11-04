@@ -35,7 +35,7 @@ This is an **independent greenfield learning lab**, managed from a personal lapt
 | Initial public inbound ports | None |
 | Network access | Public IP assigned; TCP/22 later allowed only from current personal client IP |
 | NIC/public IP cleanup | Delete public IP and NIC with VM enabled |
-| Auto-shutdown | Daily at **20:00 IST**; notification configured |
+| Auto-shutdown (initial setting) | Daily at **20:00 IST**; notification configured. **Later disabled temporarily** for uninterrupted setup (see change log below). |
 | Boot diagnostics | Enabled |
 | Resource tagging | Project: `dragonstorm-ml-engineering` |
 
@@ -159,7 +159,17 @@ Observed output:
 NO REBOOT REQUIRED
 ```
 
-## 6. Current stop point — no Docker installation yet
+## 6. Configuration change — temporary auto-shutdown disablement (verified)
+
+During the same setup day (2026-11-04), the user intentionally disabled VM **Auto-shutdown** to allow uninterrupted installation and tests.
+
+**Portal screenshot evidence:** VM Operations → Auto-shutdown shows **Off**, and VM Overview → Capabilities indicates **Auto-shutdown: Not configured**. VM Overview shows the power state **Running**.
+
+**Operational decision:** Run the remaining installation/testing session, then manually select **Stop** in Azure Portal and verify **Stopped (deallocated)** before leaving the lab. This deallocation has **not yet happened**. Persistent disk and other separately metered resources may still accrue charges after compute deallocation.
+
+**Rollback / future safeguard:** Re-enable a suitable automatic shutdown schedule when regular experimentation resumes. Record and verify that change separately.
+
+## 7. Current stop point — no Docker installation yet
 
 The **next proposed command** is:
 
