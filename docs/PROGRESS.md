@@ -42,7 +42,9 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17c-1 | Host free space after Triton pull | Complete | `df -h /var/lib/docker` reports `/dev/root` 123G total, **28G used**, **96G available**, 23% used (before pull 2.5G used / 121G free) |
 | I-17c-2 | Triton ONNX backend image inspection | Complete | Short-lived `docker run --rm --entrypoint /bin/ls ... -la /opt/tritonserver/backends/onnxruntime` listed ONNX backend shared libraries, OpenVINO CPU plugin, test tools; backend startup not yet tested |
 | I-17e | Triton model repository directory | Complete | `mkdir -p ~/dragonstorm-lab/model_repository && ls -ld ...` confirmed path, `azureuser` ownership, mode 0775; no model loaded yet |
-| I-17d | Triton server CPU launch | **Pending** | Confirm available backends and container startup before claiming success |
+| I-17d | Triton server CPU launch | **Pending** | Background container was created; status, logs and health are not yet checked |
+| I-17d-1 | Triton container launch accepted | Complete | `sudo docker run -d --rm --name triton-cpu ...` returned container ID prefix `4cac76c7c2b6`; no GPU requested; port 8000 bound to host localhost; read-only model mount |
+| I-17d-2 | Triton container running state | **Pending** | Inspect `sudo docker ps -a --filter name=triton-cpu` before assessing startup, logs, or health |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
