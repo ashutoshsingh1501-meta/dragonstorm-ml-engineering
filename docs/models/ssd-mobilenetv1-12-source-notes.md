@@ -70,3 +70,14 @@ Observed via `sudo docker logs --tail 150 triton-cpu` after controlled restart w
 - CUDA driver/helper warnings and an ONNX Runtime PCI discovery warning appeared, but model loading succeeded on CPU.
 
 **Evidence limitation:** Model-specific HTTP readiness and real inference are pending; no prediction tensor, accuracy, performance or batching results can yet be claimed.
+
+
+## Model-specific V2 HTTP readiness — 2026-11-04
+
+Executed from the Azure VM:
+
+```bash
+curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready
+```
+
+Output was `HTTP/1.1 200 OK` with empty body (`Content-Length: 0`). This confirms **model-specific Triton readiness** for `ssd_mobilenet_v1_12` at this checkpoint. **Not yet tested:** a real image input, output detections, class mappings, preprocessing correctness, bounding box rendering, latency, throughput, concurrency, or dynamic batching. The user paused work after this check. Stop/deallocation of the Azure VM is pending independent user confirmation.
