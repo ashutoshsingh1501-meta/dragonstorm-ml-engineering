@@ -26,6 +26,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-14b | End-of-session manual deallocation | **Pending** | Must confirm `Stopped (deallocated)` in Azure after lab session; compute charges continue while Running |
 | I-15 | Docker prerequisites | Complete | `sudo apt install -y ca-certificates curl` succeeded; both already installed; 0 new packages, 0 upgrades |
 | I-15a | Docker keyring directory setup | Complete | `ls -ld /etc/apt/keyrings/`: `drwxr-xr-x root root`; permissions 0755 confirmed |
+| I-15b | Docker apt signing key file | File download verified; fingerprint pending | `docker.asc` exists at `/etc/apt/keyrings/`; 3.8 KB, `root:root`, mode `0644` per `ls -lh` |
 | I-16 | Docker Engine | **Pending** | No install / verification evidence |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
