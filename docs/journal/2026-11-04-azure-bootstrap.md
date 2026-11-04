@@ -612,3 +612,28 @@ I1104 16:16:00.667515 1 http_server.cc:5022] "Started HTTPService at 0.0.0.0:800
 Backend and Model tables in the startup logs contained **no entries**. This is consistent with having placed no models in the model repository. The message `Started HTTPService` supports that the Triton HTTP listener started despite nonfatal GPU/CUDA initialization warnings. These logs alone do not prove the HTTP readiness check responds successfully or that any ONNX Runtime inference will work. The `0.0.0.0:8000` bind address is inside the container, whereas `docker ps` previously verified host publication at `127.0.0.1:8000` only.
 
 **Pending next user verification:** `curl -i --max-time 5 http://127.0.0.1:8000/v2/health/ready`. Readiness status should be recorded exactly, including any failure; no loaded-model inference has yet been demonstrated.
+
+
+## 27. Triton HTTP readiness — verified (CPU-only server)
+
+The user executed on the personal Azure Ubuntu VM:
+
+```bash
+curl -i --max-time 5 http://127.0.0.1:8000/v2/health/ready
+```
+
+Observed response:
+
+```http
+HTTP/1.1 200 OK
+Content-Length: 0
+Content-Type: text/plain
+```
+
+**Verified:** The Triton 2.74.0 server's v2 HTTP readiness endpoint responded with **HTTP 200** via the VM's loopback interface. Together with previous evidence (container `Up`, `Started HTTPService at 0.0.0.0:8000` inside container, host port mapping `127.0.0.1:8000->8000/tcp`), this demonstrates a functioning CPU-only Triton server and locally accessible inference API health endpoint without a detected NVIDIA GPU driver.
+
+**Not yet demonstrated:** model repository has an actual model, ONNX Runtime backend dynamically loads, object detection inference works, request/response correctness, benchmarking, dynamic batching, or production readiness. Empty model and backend tables were observed in startup logs.
+
+**Next intended milestone:** Query the Triton v2 server metadata endpoint locally, then prepare a license-reviewed small ONNX object detection model repository and exercise real inference. Continue to bind any exposed HTTP endpoints to localhost only.
+
+**Cost reminder:** Azure auto-shutdown was disabled for the installation session; stop and verify VM state `Stopped (deallocated)` when finished.
