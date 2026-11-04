@@ -1020,3 +1020,38 @@ CONTAINER ID   IMAGE                                   COMMAND                  
 **Verified:** The new container (full ID from previous launch: `897812b33ddebe91705ba30b1f3f9d723baff19b7544e1d63e20085c5ff65afe`) remained running 3 minutes after being launched with an ONNX model repository, and Docker published HTTP to the VM's loopback interface only. This does **not** prove the ONNX Runtime backend has loaded the model, that model readiness is true, or that inference is working. The new container deliberately omits `--rm` so logs remain available if the process fails.
 
 **Next verification pending:** Run `sudo docker logs --tail 150 triton-cpu` and inspect actual Triton/model/backend initialization messages, including any errors. If logs indicate a loaded model, still separately check model-specific readiness and actual inference. Keep host-side endpoints local, and remember the Azure VM currently requires manual Stop (deallocate) at session end.
+
+
+## 46. ONNX Runtime CPU model successfully loaded — verified from Triton startup logs
+
+The user executed:
+
+```bash
+sudo docker logs --tail 150 triton-cpu
+```
+
+**Selected actual output (Triton 2.74.0 / NVIDIA release 26.10):**
+
+```text
+WARNING: The NVIDIA Driver was not detected. GPU functionality will not be available.
+I1104 17:14:03.079746 1 cuda_memory_manager.cc:117] "CUDA memory pool disabled"
+W1104 17:14:03.079686 1 pinned_memory_manager.cc:273] "Unable to allocate pinned system memory, pinned memory pool will not be available: CUDA driver version is insufficient for CUDA runtime version"
+E1104 17:14:03.079906 1 server.cc:248] "CudaDriverHelper has not been initialized."
+I1104 17:14:03.081502 1 model_lifecycle.cc:478] "loading: ssd_mobilenet_v1_12:1"
+I1104 17:14:03.090795 1 onnxruntime.cc:2997] "TRITONBACKEND_Initialize: onnxruntime"
+I1104 17:14:03.187754 1 onnxruntime.cc:3108] "TRITONBACKEND_ModelInitialize: ssd_mobilenet_v1_12 (version 1)"
+I1104 17:14:03.188106 1 onnxruntime.cc:1018] "skipping model configuration auto-complete for 'ssd_mobilenet_v1_12': inputs and outputs already specified"
+I1104 17:14:03.188573 1 onnxruntime.cc:3173] "TRITONBACKEND_ModelInstanceInitialize: ssd_mobilenet_v1_12_0_0 (CPU device 0)"
+I1104 17:14:07.801309 1 model_lifecycle.cc:854] "successfully loaded 'ssd_mobilenet_v1_12'"
+| Backend     | Path                                                            |
+| onnxruntime | /opt/tritonserver/backends/onnxruntime/libtriton_onnxruntime.so |
+| Model               | Version | Status |
+| ssd_mobilenet_v1_12 | 1       | READY  |
+I1104 17:14:07.801774 1 http_server.cc:5022] "Started HTTPService at 0.0.0.0:8000"
+```
+
+There was also a **nonfatal ONNX Runtime PCI device-discovery warning** from `device_discovery.cc:146 GetPciBusId` relating to an Azure virtual PCI path. Triton successfully initialized the ONNX Runtime backend and a CPU model instance afterward. The NVIDIA driver and CUDA helper initialization warnings did not prevent the CPU model from loading.
+
+**Verified:** The actual ONNX Runtime Triton backend initialized; the SSD-MobileNetV1-12 ONNX model version 1 loaded successfully; Triton explicitly reported a CPU instance and model state `READY`. The startup logs show Triton HTTP service started in the container. This is the first verified functional *model loading* milestone, not an inference correctness result.
+
+**Not yet verified:** Model-specific HTTP readiness after initialization; Tensor inference requests; model outputs and detection accuracy; performance, batching or concurrency. The container's internal listener `0.0.0.0:8000` remains mapped by Docker to host `127.0.0.1:8000` only. The next single user action is to query `/v2/models/ssd_mobilenet_v1_12/ready` with curl, then prepare a controlled test image tensor and inference client.
