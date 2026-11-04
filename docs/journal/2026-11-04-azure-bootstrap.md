@@ -203,4 +203,4 @@ It returned to the shell prompt each time without output or reported errors. Sil
 ls -ld /etc/apt/keyrings
 ```
 
-**Verification pending:** The actual directory listing has not yet been observed. Docker's GPG key and apt repository have not yet been configured.
+**Verification complete:** `ls -ld /etc/apt/keyrings/` returned `drwxr-xr-x 2 root root 4096 Mar 31 2024 /etc/apt/keyrings/`. Directory permissions are 0755 and ownership is `root:root`. The directory's 2024 timestamp is consistent with it preexisting today's command; no Docker GPG key or apt source has been configured yet.
