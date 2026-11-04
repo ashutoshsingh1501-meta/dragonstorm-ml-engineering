@@ -696,3 +696,18 @@ drwxrwxr-x 2 azureuser azureuser 4096 Nov  4 16:33 /home/azureuser/dragonstorm-l
 **Verified:** Versioned model directory `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1` exists, owned by `azureuser`, mode `0775`. This is the conventional Triton model-repository layout; the initial model version directory has been created but **no model download or configuration is demonstrated** by this output. The existing CPU-only Triton instance is already running with `MODE_NONE`, and will need a controlled restart after model files/configuration are added.
 
 **Next planned step:** Download the SSD-MobileNetV1-12 ONNX binary from its upstream distribution URL, confirm final file size and SHA-256, and inspect graph inputs and outputs before generating `config.pbtxt`. Avoid committing binary model artifacts to the public GitHub learning repository.
+
+
+## 31. Download initial SSD-MobileNet ONNX model — transfer completed, integrity not yet verified
+
+The user ran on the personal Azure VM:
+
+```bash
+curl --fail --location --show-error \\
+  --output "$HOME/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx" \\
+  "https://huggingface.co/onnxmodelzoo/ssd_mobilenet_v1_12/resolve/main/ssd_mobilenet_v1_12.onnx"
+```
+
+Observed curl transfer output showed an initial **1,072-byte** response followed by a **28.0M** transfer, with no error and a returned shell prompt. With `--location`, this is consistent with following the model host's redirect and downloading the model artifact. The target path is version 1's standard Triton filename `model.onnx`.
+
+**Evidence boundary:** Curl reported a successful download; exact file integrity, actual local file size and graph compatibility have **not yet been independently verified**. No Triton inference performed. The next verification must run SHA-256 on the local artifact and compare to the upstream model-file metadata (expected `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058` as documented in `docs/models/ssd-mobilenetv1-12-source-notes.md`). Do not restart Triton until model graph and `config.pbtxt` are validated.
