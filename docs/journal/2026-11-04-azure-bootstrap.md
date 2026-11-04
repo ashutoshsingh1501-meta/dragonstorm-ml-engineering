@@ -517,3 +517,22 @@ sudo docker run --rm --entrypoint /bin/ls nvcr.io/nvidia/tritonserver:26.10-py3 
 **Interpretation:** Files exist in the Triton container image. This does **not** demonstrate successful ONNX backend initialization, selected execution providers, loaded vision models, or inference. The temporary container did not launch the Triton server and did not publish network ports.
 
 **Next:** Prepare an empty local Triton model repository and test CPU-only Triton startup with localhost-bound endpoints before adding an open-source ONNX object detection model. For this personal learning environment, do not open Triton ports on the public Azure interface or add public NSG rules.
+
+
+## 23. Triton model repository directory — verified
+
+The user executed on the Azure VM:
+
+```bash
+mkdir -p ~/dragonstorm-lab/model_repository && ls -ld ~/dragonstorm-lab/model_repository
+```
+
+Observed:
+
+```text
+drwxrwxr-x 2 azureuser azureuser 4096 Nov  4 16:13 /home/azureuser/dragonstorm-lab/model_repository
+```
+
+**Verified:** The local model repository path exists, is owned by `azureuser` and has mode `0775`. No model was placed in it during this step. The directory listing alone does not prove the directory is empty, only that the directory itself exists.
+
+**Next planned experiment:** Launch the already-downloaded `nvcr.io/nvidia/tritonserver:26.10-py3` container without a GPU, mount the model directory read-only at `/models`, and bind the Triton HTTP port only to `127.0.0.1` on the Azure VM. Startup and health will need separate observation. The image's ONNX backend files were previously inspected but no actual model has been loaded.
