@@ -914,3 +914,20 @@ ONNX GRAPH CHECK: PASSED
 **Configuration artifact committed (not deployed yet):** `model_repository/ssd_mobilenet_v1_12/config.pbtxt` with `backend: "onnxruntime"`, `max_batch_size: 0`, UINT8 input dims `[-1,-1,-1,3]`, FP32 output dims `[-1,-1,4]`, `[-1,-1]`, `[-1,-1]`, `[-1]`, and a single `KIND_CPU` instance. Config uses no Triton-managed batching; full ONNX batch dimension is retained as an explicit dimension of each tensor. This is an initial hypothesis consistent with graph metadata, **not** yet evidence the ONNX Runtime backend can load or infer.
 
 **Next user action (pending):** Download the committed config file onto the personal VM next to the model's version directory; inspect content afterward, then controlled restart of Triton because the running server was started in `MODE_NONE`. Keep host HTTP bound to loopback and document any model-load errors.
+
+
+## 41. Triton model configuration transferred to Azure VM — curl completed; contents pending validation
+
+The user ran:
+
+```bash
+curl --fail --location --show-error \\
+  --output "$HOME/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/config.pbtxt" \\
+  "https://raw.githubusercontent.com/ashutoshsingh1501-meta/dragonstorm-ml-engineering/main/model_repository/ssd_mobilenet_v1_12/config.pbtxt"
+```
+
+Observed curl progress: `100 1069 100 1069` bytes received with no reported error and returned shell prompt.
+
+**Verified:** Download command successfully transferred approximately 1,069 bytes into the intended local Triton model-configuration path, sourced from the version-controlled project configuration. **Not yet verified:** The actual content saved in the file, its exact match to the GitHub file, the config's acceptance by Triton, or model loading. The previously running Triton server is still using `MODE_NONE` and has **not** been restarted as part of this step.
+
+**Next checkpoint:** Review contents of `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/config.pbtxt` with `cat` before a controlled restart. For exact provenance, a checksum comparison can be added after verifying content, but no hash was observed in this user response. Continue local-only network exposure.
