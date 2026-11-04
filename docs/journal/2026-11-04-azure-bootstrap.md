@@ -1078,3 +1078,16 @@ Content-Type: text/plain
 **Session stopping point — 2026-11-04 (user elected to pause):** The user asked whether to end for today; recommendation is to pause now, before making any inference request. **Next learning checkpoint:** Resume VM and container, then prepare/send a deterministic test input to Triton's localhost V2 inference endpoint, inspect all four outputs, and eventually validate image preprocessing, bounding boxes and classes. No predictions, benchmarking, or dynamic batching have been observed to date.
 
 **Critical Azure cost-control action — NOT YET VERIFIED:** Auto-shutdown for `vm-dragonstorm-ml-01` is Off. The user must use Azure Portal VM **Stop** (deallocate) and wait for `Stopped (deallocated)` to appear. Do not mark the VM as deallocated merely because the user said they would stop, or from closing SSH. VM OS disk continues to incur storage charges, but deallocation stops VM compute billing. The existing Triton container was launched without `--rm` and without a restart policy; on the next VM boot, it will normally remain on disk in an exited state and can be resumed with `sudo docker start triton-cpu`, followed by status/readiness checks.
+
+
+## 48. Full terminal transcript coverage audit (provided after session)
+
+The user supplied a local terminal transcript covering **939 displayed lines**, beginning with a Windows PowerShell SSH connection attempt and ending with the successful HTTP 200 response from `GET /v2/models/ssd_mobilenet_v1_12/ready`.
+
+Review found the terminal-executed Dragon Storm milestones previously documented in this journal represented in chronological order: initial SSH host trust and local private-key permission remediation, Ubuntu host resource checks and updates, Docker installation and hello-world test, Triton image manifest/pull/storage verification, CPU-only Triton startup and HTTP health, ONNX model checksum and graph checks, isolated Python environment remediation, configuration transfer, controlled server restart, CPU model load, and model-specific readiness. Some console lines wrap or are pasted as continuation lines; no materially missing user-shared terminal milestone was identified.
+
+**Important coverage limitations:** The transcript does not cover Azure Portal actions such as resource provisioning, NSG changes, auto-shutdown setting, or VM deallocation. VM status **Stopped (deallocated)** remains unverified. A pasted console transcript is not a complete audit log of every background system event.
+
+**Public-repository privacy decision:** Do not commit the unredacted raw transcript, as it contains infrastructure/network identifiers (including public IP), a Windows user-profile file path and SSH host fingerprint. No private-key file contents were present in the reviewed transcript. Retain the detailed sanitized engineering journal rather than publishing a raw session transcript.
+
+**Next functional milestone (pending):** Real ONNX image inference and interpretation of detection boxes/classes/scores; model readiness alone is not inference success.
