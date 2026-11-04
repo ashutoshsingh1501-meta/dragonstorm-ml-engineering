@@ -677,3 +677,22 @@ drwxrwxr-x 3 azureuser azureuser 4096 Nov  4 16:13 ..
 **Verified:** The Triton model repository was empty when inspected (only the `.` and `..` directory entries). No ONNX model, version folder or `config.pbtxt` has been added yet.
 
 **Next planned task:** Select and independently verify a legitimate permissively licensed object-detection ONNX model with known input tensor shape, output parsing and CPU compatibility before creating its Triton repository layout. The running Triton instance uses `MODE_NONE`; new models will require a controlled restart to load. Maintain one verified user action per turn and document completed steps in GitHub.
+
+
+## 30. First ONNX detector version directory — verified
+
+The user executed on the Azure Ubuntu VM:
+
+```bash
+mkdir -p ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1 && ls -ld ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1
+```
+
+Observed output:
+
+```text
+drwxrwxr-x 2 azureuser azureuser 4096 Nov  4 16:33 /home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1
+```
+
+**Verified:** Versioned model directory `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1` exists, owned by `azureuser`, mode `0775`. This is the conventional Triton model-repository layout; the initial model version directory has been created but **no model download or configuration is demonstrated** by this output. The existing CPU-only Triton instance is already running with `MODE_NONE`, and will need a controlled restart after model files/configuration are added.
+
+**Next planned step:** Download the SSD-MobileNetV1-12 ONNX binary from its upstream distribution URL, confirm final file size and SHA-256, and inspect graph inputs and outputs before generating `config.pbtxt`. Avoid committing binary model artifacts to the public GitHub learning repository.
