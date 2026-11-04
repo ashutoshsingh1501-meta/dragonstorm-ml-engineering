@@ -22,6 +22,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-12 | Package index refresh | Complete | `sudo apt update` succeeded |
 | I-13 | Package upgrade | Complete | 16 updated; 0 removed; 8 security updates |
 | I-14 | Reboot requirement check | Complete | `NO REBOOT REQUIRED` |
+| I-14a | Temporary auto-shutdown change | Complete | Azure VM Auto-shutdown page shows Off; Overview shows Not configured; VM Running |
+| I-14b | End-of-session manual deallocation | **Pending** | Must confirm `Stopped (deallocated)` in Azure after lab session; compute charges continue while Running |
 | I-15 | Docker prerequisites | **Pending** | `sudo apt install -y ca-certificates curl` suggested but not yet executed |
 | I-16 | Docker Engine | **Pending** | No install / verification evidence |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
@@ -31,6 +33,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 - Independently verify the SSH host key fingerprint via a trusted out-of-band channel; the first SSH host key was accepted before this verification.
 - Verify active network rule and power state before each remote connection; public client IP may change.
+- **Temporary cost-control exception (2026-11-04):** Auto-shutdown is Off for today's installation/testing. Manual Stop + verified `Stopped (deallocated)` is required before finishing; restoring an automatic schedule afterward is recommended.
 - Reassess image backend support, actual container size, and cost prior to downloading Triton.
 - Keep GPU provisioning separate; current deployment is CPU-only.
 
