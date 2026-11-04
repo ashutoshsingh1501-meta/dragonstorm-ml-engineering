@@ -324,3 +324,30 @@ Observed client and server details:
 **Result:** Both Client and Server sections are present; the Docker CLI can communicate with the running daemon. This verifies runtime connectivity, not successful execution of a container.
 
 **Next proposed action, pending:** `sudo docker run --rm hello-world`. This downloads a small public test image if necessary, runs a container, and removes the container on exit; the image remains cached until explicitly removed.
+
+
+## 14. First Docker container — completed
+
+The user ran on the personal Azure Ubuntu VM:
+
+```bash
+sudo docker run --rm hello-world
+```
+
+Observed output confirmed:
+- Image `hello-world:latest` was not previously cached.
+- Docker pulled the official public image from Docker Hub, selecting architecture `amd64`.
+- Layers completed download and the image was reported downloaded.
+- Docker created the test container and streamed its standard output.
+- The container printed:
+
+```text
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+```
+
+- The shell prompt returned without reported errors.
+
+**Outcome:** Image pulling, daemon access, container creation, and container execution have been demonstrated on the VM. The `--rm` option removes the exited container; the downloaded image normally remains cached locally. This is not yet evidence that NVIDIA Triton or an ML model works.
+
+**Next phase (pending):** Verify Docker storage and select an official NVIDIA Triton container with ONNX backend support and a CPU-compatible open-source vision model. Inspect supported image tags, prerequisites and disk requirements *before* pulling the large image. For CPU inference, avoid assuming GPU-only backends or NVIDIA drivers are available. Keep benchmark outcomes clearly labeled CPU-only.
