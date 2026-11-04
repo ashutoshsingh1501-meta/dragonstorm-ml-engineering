@@ -36,6 +36,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-16d | Docker storage filesystem free space | Complete | `df -h /var/lib/docker`: `/dev/root` 123G total, 2.5G used, **121G available** (3% used); actual Docker root not yet independently verified |
 | I-16e | Docker data-root verification | Complete | `sudo docker info --format '{{.DockerRootDir}}'` returned `/var/lib/docker`; filesystem check found 121 GiB available |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
+| I-17a | Triton image registry manifest | Complete | `sudo docker manifest inspect nvcr.io/nvidia/tritonserver:26.10-py3` succeeded; tag accessible |
+| I-17b | Triton image pull | **Pending** | Pull image after accepting large image download and monitoring disk usage |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
