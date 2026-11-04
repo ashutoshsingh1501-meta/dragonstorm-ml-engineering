@@ -55,3 +55,18 @@ Parser: ONNX 1.19.1; graph IR version **7**, default ONNX opset **12**. `onnx.ch
 Input is rank 4 and channels-last (last dimension 3). All other dimensions are symbolic/unspecified, and the model graph has distinct symbolic IDs, so do not assume equal shapes without inference tests. Inspected tensor names supersede the names cited in older upstream documentation. Upstream file SHA-256 was independently verified earlier.
 
 The initial version-controlled Triton configuration is [`model_repository/ssd_mobilenet_v1_12/config.pbtxt`](../../model_repository/ssd_mobilenet_v1_12/config.pbtxt). It specifies a single CPU instance and `max_batch_size: 0`, avoiding claims of Triton dynamic batching. The config has **not yet been installed or validated on the Azure VM**. Triton model loading, CPU provider support and inference correctness remain pending.
+
+
+## Triton ONNX Runtime CPU load result — 2026-11-04
+
+Observed via `sudo docker logs --tail 150 triton-cpu` after controlled restart with the model repository mounted at `/models`:
+
+- Triton **2.74.0** initialized the **onnxruntime** backend at `/opt/tritonserver/backends/onnxruntime/libtriton_onnxruntime.so`.
+- Model version 1: `TRITONBACKEND_ModelInitialize: ssd_mobilenet_v1_12 (version 1)`.
+- Instance: `TRITONBACKEND_ModelInstanceInitialize: ssd_mobilenet_v1_12_0_0 (CPU device 0)`.
+- Loaded successfully: `successfully loaded 'ssd_mobilenet_v1_12'`.
+- Triton model table: `ssd_mobilenet_v1_12 | 1 | READY`.
+- Triton HTTPService started on container port 8000. Host publishes **loopback only**.
+- CUDA driver/helper warnings and an ONNX Runtime PCI discovery warning appeared, but model loading succeeded on CPU.
+
+**Evidence limitation:** Model-specific HTTP readiness and real inference are pending; no prediction tensor, accuracy, performance or batching results can yet be claimed.
