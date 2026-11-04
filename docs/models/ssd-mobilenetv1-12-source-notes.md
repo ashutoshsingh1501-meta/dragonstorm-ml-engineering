@@ -32,3 +32,9 @@ The ONNX Model Zoo's SSD-MobileNetV1-12 is an actual object detection model trai
 NVIDIA Triton documentation on CPU instance groups: https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/user_guide/model_configuration.html
 
 **Caution:** Model license metadata, graph, ONNX operators, ONNX Runtime CPU execution provider support, and Triton backend load remain subjects for **actual validation**. Do not publish model binary in the learning repository by default.
+
+## Artifact verification on Azure VM
+
+- Local SHA-256 verified after `curl` transfer: `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058` — **matches upstream digest exactly**.
+- Local path: `/home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx`.
+- Next: Inspect real ONNX graph I/O and opset. Runtime compatibility, backend loading, and inference remain unverified.
