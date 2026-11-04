@@ -38,3 +38,20 @@ NVIDIA Triton documentation on CPU instance groups: https://docs.nvidia.com/deep
 - Local SHA-256 verified after `curl` transfer: `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058` — **matches upstream digest exactly**.
 - Local path: `/home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx`.
 - Next: Inspect real ONNX graph I/O and opset. Runtime compatibility, backend loading, and inference remain unverified.
+
+
+## Verified ONNX graph metadata — 2026-11-04
+
+Parser: ONNX 1.19.1; graph IR version **7**, default ONNX opset **12**. `onnx.checker.check_model(model)` **PASSED**.
+
+| IO | Actual tensor name | ONNX dtype | ONNX shape (symbolic identifiers preserved) |
+|---|---|---|---|
+| Input | `inputs` | UINT8 | `['unk__6578', 'unk__6579', 'unk__6580', 3]` |
+| Output | `detection_boxes` | FLOAT | `['unk__6581', 'unk__6582', 4]` |
+| Output | `detection_classes` | FLOAT | `['unk__6583', 'unk__6584']` |
+| Output | `detection_scores` | FLOAT | `['unk__6585', 'unk__6586']` |
+| Output | `num_detections` | FLOAT | `['unk__6587']` |
+
+Input is rank 4 and channels-last (last dimension 3). All other dimensions are symbolic/unspecified, and the model graph has distinct symbolic IDs, so do not assume equal shapes without inference tests. Inspected tensor names supersede the names cited in older upstream documentation. Upstream file SHA-256 was independently verified earlier.
+
+The initial version-controlled Triton configuration is [`model_repository/ssd_mobilenet_v1_12/config.pbtxt`](../../model_repository/ssd_mobilenet_v1_12/config.pbtxt). It specifies a single CPU instance and `max_batch_size: 0`, avoiding claims of Triton dynamic batching. The config has **not yet been installed or validated on the Azure VM**. Triton model loading, CPU provider support and inference correctness remain pending.
