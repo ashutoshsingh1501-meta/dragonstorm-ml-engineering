@@ -799,3 +799,32 @@ Failing command: /home/azureuser/dragonstorm-lab/.venv-onnx-inspect/bin/python3
 **Status:** The venv creation attempt failed, so no functional isolated environment has been verified. It may have left a partial directory on the host. The missing `ensurepip` capability is consistent with a minimal Ubuntu Python 3.12 installation; this error does not demonstrate any failure of Docker, Triton server readiness, or the downloaded ONNX model.
 
 **Next corrective action pending:** Install distro package `python3.12-venv` with `sudo apt install -y python3.12-venv`, capture package-manager result, then retry `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` as a separate checked action. Avoid installing ONNX into the host's externally managed system Python or mutating the live Triton container.
+
+
+## 36. Install Python 3.12 venv bootstrap support — verified
+
+Following a failed virtual environment creation (`ensurepip` unavailable), the user executed:
+
+```bash
+sudo apt install -y python3.12-venv
+```
+
+APT successfully installed three previously absent packages:
+
+```text
+python3-pip-whl       24.0+dfsg-1ubuntu1.3
+python3-setuptools-whl 68.1.2-2ubuntu1.2
+python3.12-venv      3.12.3-1ubuntu0.17
+0 upgraded, 3 newly installed, 0 to remove and 0 not upgraded.
+Fetched 2429 kB
+After this operation, 2777 kB of additional disk space will be used.
+Setting up python3-setuptools-whl ...
+Setting up python3-pip-whl ...
+Setting up python3.12-venv ...
+Running kernel seems to be up-to-date.
+No containers need to be restarted.
+```
+
+APT's `needrestart` scan reported some deferred service restarts (`dbus`, `networkd-dispatcher`, `systemd-logind`, `unattended-upgrades`); it also identified the user's current SSH process as using outdated binaries. These are observations, not evidence of a failing Python install or reason to immediately disrupt the SSH session. No Docker container restart was requested.
+
+**Verified:** Ubuntu Python 3.12 venv bootstrap dependency has been installed successfully. **Not yet verified:** creation and operation of the dedicated ONNX inspection virtual environment. Next run `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` again and inspect the actual outcome. The previous failed attempt may have left a partial directory, so verify the new result rather than assuming success.
