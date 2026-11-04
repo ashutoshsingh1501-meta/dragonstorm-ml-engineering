@@ -637,3 +637,22 @@ Content-Type: text/plain
 **Next intended milestone:** Query the Triton v2 server metadata endpoint locally, then prepare a license-reviewed small ONNX object detection model repository and exercise real inference. Continue to bind any exposed HTTP endpoints to localhost only.
 
 **Cost reminder:** Azure auto-shutdown was disabled for the installation session; stop and verify VM state `Stopped (deallocated)` when finished.
+
+
+## 28. Triton v2 server metadata — verified
+
+User command:
+
+```bash
+curl -sS http://127.0.0.1:8000/v2
+```
+
+User-reported response:
+
+```json
+{"name":"triton","version":"2.74.0","extensions":["classification","sequence","model_repository","model_repository(unload_dependents)","schedule_policy","model_configuration","system_shared_memory","cuda_shared_memory","binary_tensor_data","parameters","statistics","trace","logging"]}
+```
+
+**Verified:** The locally running CPU-only Triton service responds to the V2 server metadata API and identifies itself as Triton **2.74.0**. It advertises listed protocol extensions, including model repository management/configuration, schedule policy and request statistics. **Not yet verified:** actual model loading, ONNX Runtime execution, dynamic batching behavior, throughput, or correct prediction outputs. Advertised extension presence is not proof that individual performance features have been exercised.
+
+**Next pending validation:** Inspect `~/dragonstorm-lab/model_repository` and start preparing a license-checked open-source ONNX object detection model with input/output tensors and CPU device support verified before serving. The Triton container was launched with a read-only bind mount, so changes made to the host repository can be recognized only under supported model loading modes; default `MODE_NONE` startup reads models at initialization. Plan for a controlled restart to load new models and check readiness/logs afterward.
