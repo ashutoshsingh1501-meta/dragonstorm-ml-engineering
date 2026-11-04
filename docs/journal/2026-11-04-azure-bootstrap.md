@@ -828,3 +828,19 @@ No containers need to be restarted.
 APT's `needrestart` scan reported some deferred service restarts (`dbus`, `networkd-dispatcher`, `systemd-logind`, `unattended-upgrades`); it also identified the user's current SSH process as using outdated binaries. These are observations, not evidence of a failing Python install or reason to immediately disrupt the SSH session. No Docker container restart was requested.
 
 **Verified:** Ubuntu Python 3.12 venv bootstrap dependency has been installed successfully. **Not yet verified:** creation and operation of the dedicated ONNX inspection virtual environment. Next run `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` again and inspect the actual outcome. The previous failed attempt may have left a partial directory, so verify the new result rather than assuming success.
+
+
+## 37. Recreated Python virtual environment after installing support — command completed without errors
+
+After installing Ubuntu package `python3.12-venv`, the user ran the same command twice in the Azure VM terminal:
+
+```bash
+python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect
+python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect
+```
+
+Both commands returned directly to the shell prompt, with **no terminal output or error messages**. The normal successful `venv` behavior is to emit no output. Re-running `venv` with an existing target directory is typically harmless; it does not automatically clear the directory unless special options are used.
+
+**Verified checkpoint:** The prior `ensurepip` error did not recur, and both attempted environment-creation commands completed without a reported error. **Still pending:** direct verification that the virtual environment's Python executable and `pip` work. This avoids treating a silent command as proof all tools are installed.
+
+**Next user command:** `~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip --version`. Once verified, install the ONNX parser into this **isolated venv**, not into system Python or the Triton server container; inspect actual model graph metadata before writing `config.pbtxt`.
