@@ -730,3 +730,22 @@ b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058  /home/azureuse
 **Verified:** The local `model.onnx` checksum **exactly matches** the previously recorded upstream ONNX Model Zoo / Hugging Face expected SHA-256 `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058`. This verifies the binary's byte integrity relative to that upstream digest; it does **not** guarantee model safety, graph compatibility, or inference correctness. No model has been loaded by Triton yet.
 
 **Next:** Inspect the actual ONNX graph input/output names, dtypes and shapes, and opset using an ONNX parser inside an isolated environment. The existing Triton container has the model repository mounted read-only. If the container lacks the Python `onnx` package, check first and choose a bounded reproducible alternative rather than modifying the running Triton environment.
+
+
+## 33. Python ONNX parser availability in Triton container — checked
+
+The user executed:
+
+```bash
+sudo docker exec triton-cpu python3 -c 'import importlib.util; print("ONNX package installed:", importlib.util.find_spec("onnx") is not None)'
+```
+
+Observed output:
+
+```text
+ONNX package installed: False
+```
+
+**Interpretation:** The Python interpreter found inside the running `triton-cpu` container does **not** have the importable `onnx` Python graph-inspection package installed. This is **not** evidence that the Triton ONNX Runtime backend is unavailable: the separately inspected `/opt/tritonserver/backends/onnxruntime` contains its compiled runtime shared libraries. Parsing model metadata with `onnx` and serving an ONNX model with Triton ONNX Runtime are distinct tasks.
+
+**Approach:** Do not modify the running Triton service or install packages into its ephemeral container. Verify host Python packaging/virtual-environment availability, then use a dedicated isolated inspection environment to report the actual graph input and output tensor names, element types, dimensions and opset. Model loading and inference remain pending.
