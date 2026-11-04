@@ -394,3 +394,26 @@ Filesystem      Size  Used Avail Use% Mounted on
 **Interpretation:** The filesystem containing `/var/lib/docker` is the root ext4 volume, with **121 GiB reported available** and only **3% used** at this checkpoint. This represents host filesystem headroom, not Docker-specific image usage; the last `docker system df` check reported only one tiny cached test image.
 
 **Pending verification:** Query `sudo docker info --format '{{.DockerRootDir}}'` for Docker's configured data root before making assumptions about where all Docker data is stored. Newer Docker installations may also store image data through containerd; inspect filesystem use before pulling large runtime images. No Triton image has been pulled.
+
+
+## 17. Docker data-root verification — completed
+
+The user executed:
+
+```bash
+sudo docker info --format '{{.DockerRootDir}}'
+```
+
+Actual output:
+
+```text
+/var/lib/docker
+```
+
+**Verified:** Docker's configured data root is `/var/lib/docker`. The preceding `df -h /var/lib/docker` result showed **121 GiB available** on its root filesystem. This demonstrates available filesystem space, not the exact space a future container image will consume.
+
+**Image assessment (documentation research, not user execution):** NVIDIA's NGC catalog lists `nvcr.io/nvidia/tritonserver:26.10-py3` (updated 2026-11-02), with ONNX Runtime support and reported compressed image size **9.69 GB**. NVIDIA's Triton Quickstart documents CPU-only execution without the Docker `--gpus` flag. References:
+- https://catalog.ngc.nvidia.com/orgs/nvidia/-/containers/tritonserver/26.10-py3
+- https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html
+
+No Triton image download has occurred. Estimated decompressed image, disk/temp consumption and actual runtime resource usage still require observation after pulling. GPU-based backends must not be assumed operational on this CPU-only VM.
