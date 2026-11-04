@@ -177,7 +177,7 @@ The **next proposed command** is:
 sudo apt install -y ca-certificates curl
 ```
 
-**Not yet executed/verified.** These are prerequisites for configuring Docker's official package repository. Docker Engine, Triton, vision models, inference requests, load tests, training runs, and model evaluations **have not yet been performed** in this lab.
+**Executed and verified.** Output: `ca-certificates` version `20260816ubuntu0.24.04.1` and `curl` version `8.5.0-2ubuntu10.16` already installed; `0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded`. Next: configure Docker's official apt repository following the official Ubuntu instructions. Docker Engine, Triton, vision models, inference requests, load tests, training runs, and model evaluations **have not yet been performed** in this lab.
 
 ## Lessons for future write-ups
 
