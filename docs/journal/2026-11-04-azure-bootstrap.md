@@ -472,6 +472,26 @@ IMAGE                                   ID             DISK USAGE   CONTENT SIZE
 nvcr.io/nvidia/tritonserver:26.10-py3   b404f7de5dbe       26.5GB         9.45GB
 ```
 
-**Outcome:** The local image is present; Docker reports **26.5 GB disk usage** and **9.45 GB content size**. These are Docker-reported image metrics and should not be treated as a precise measurement of the difference in physical filesystem occupancy. That difference will be measured by comparing host filesystem use before and after via `df -h /var/lib/docker`. The earlier pre-pull backing filesystem showed **121 GiB available**; post-pull check is still pending.
+**Outcome:** The local image is present; Docker reports **26.5 GB disk usage** and **9.45 GB content size**. These are Docker-reported image metrics and should not be treated as a precise measurement of the difference in physical filesystem occupancy. The host disk difference has now been measured: before the pull the root filesystem showed **2.5G used / 121G available**, and after the pull **28G used / 96G available**. This is an approximately **25.5 GiB increase** in host-reported used space (rounded), which is not directly identical to Docker's 26.5 GB image metric.
 
 **Not yet demonstrated:** the image can launch without a GPU, the ONNX Runtime backend exists and loads, or inference works.
+
+
+## 21. Post-pull storage availability — verified
+
+The user executed:
+
+```bash
+df -h /var/lib/docker
+```
+
+Output:
+
+```text
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root       123G   28G   96G  23% /
+```
+
+**Result:** The VM has **96 GiB free** on the filesystem containing the Docker data root, compared with **121 GiB before the image pull**. This is suitable initial headroom for a small ONNX vision model and Triton exploratory work. The disk numbers are rounded; Docker-reported image size and filesystem-space delta need not match exactly.
+
+**Next proposed command (not yet executed):** inspect the ONNX Runtime backend directory in the downloaded Triton image using a short-lived container, without opening network ports or running the model server.
