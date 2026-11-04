@@ -33,7 +33,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-16a | Docker daemon and CLI communication | Complete | `sudo docker version` returned both Client and Server 29.9.3 (API 1.56), linux/amd64; containerd 2.4.2, runc 1.5.2 |
 | I-16b | First Docker test container | Complete | `sudo docker run --rm hello-world` pulled official amd64 image, printed `Hello from Docker!`, exited successfully; `--rm` cleaned up container |
 | I-16c | Docker disk usage baseline | Complete | `sudo docker system df`: 1 image, 36.94 kB total (25.87 kB reclaimable), 0 containers, 0 volumes, 0 build cache |
-| I-16d | Docker storage filesystem free space | **Pending** | Run `df -h /var/lib/docker` to check the filesystem backing Docker data |
+| I-16d | Docker storage filesystem free space | Complete | `df -h /var/lib/docker`: `/dev/root` 123G total, 2.5G used, **121G available** (3% used); actual Docker root not yet independently verified |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
