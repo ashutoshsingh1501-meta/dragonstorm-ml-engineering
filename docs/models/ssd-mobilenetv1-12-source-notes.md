@@ -11,6 +11,9 @@ The ONNX Model Zoo's SSD-MobileNetV1-12 is an actual object detection model trai
 - Model card: https://huggingface.co/onnxmodelzoo/ssd_mobilenet_v1_12
 - Historic upstream documentation: https://github.com/onnx/models/blob/main/validated/vision/object_detection_segmentation/ssd-mobilenetv1/README.md
 - Model file size shown by Hugging Face: approximately **29.5 MB** (unverified locally).
+- Verified upstream file page: https://huggingface.co/onnxmodelzoo/ssd_mobilenet_v1_12/blob/main/ssd_mobilenet_v1_12.onnx
+- Direct artifact URL (to be validated from the VM): https://huggingface.co/onnxmodelzoo/ssd_mobilenet_v1_12/resolve/main/ssd_mobilenet_v1_12.onnx
+- **Expected upstream SHA-256 (Hugging Face file metadata):** `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058`. Actual downloaded file must be hashed and matched before use.
 - Model card lists ONNX opset **12**, batch size **1**, and input as NHWC with 3 channels and `uint8` image values; example input tensor: `image_tensor:0`.
 - Four documented outputs: `num_detections:0`, `detection_boxes:0`, `detection_scores:0`, and `detection_classes:0`.
 - Output bounding boxes are normalized relative to the source image; class labels are COCO categories.
