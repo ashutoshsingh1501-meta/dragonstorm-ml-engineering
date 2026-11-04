@@ -54,7 +54,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18c | First ONNX model versioned directory | Complete | `mkdir -p ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1 && ls -ld ...` verified `/home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1`, owner/group `azureuser`, mode 0775; model binary not downloaded |
 | I-18d | ONNX model artifact download | Complete (integrity pending) | `curl --fail --location --show-error --output .../ssd_mobilenet_v1_12/1/model.onnx` transferred about 28.0 MiB from the ONNX Model Zoo Hugging Face resolve URL without reported errors; SHA-256 not yet checked |
 | I-18e | ONNX model artifact SHA-256 | Complete | Local SHA-256 exactly matches upstream metadata: `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058` |
-| I-18f | ONNX graph metadata inspection | **Pending** | Inspect downloaded model's actual inputs, outputs, data types, shapes and opset via local ONNX parser before Triton configuration |
+| I-18f | ONNX graph metadata inspection | **Pending** | Container Python `onnx` package absent; inspect host Python package / venv capabilities then create isolated model inspection environment to inspect actual tensors and opset |
+| I-18f-1 | Triton container Python ONNX parser check | Complete | `sudo docker exec triton-cpu python3 -c 'import importlib.util; ...'` printed `ONNX package installed: False`; Triton ONNX Runtime shared-library backend remains present |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
