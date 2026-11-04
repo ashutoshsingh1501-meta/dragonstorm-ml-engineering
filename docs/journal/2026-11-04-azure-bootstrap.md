@@ -265,3 +265,36 @@ All packages are up to date.
 ```
 
 **Outcome:** Docker APT metadata was fetched successfully, with no signature or repository errors reported. This verifies package-source connectivity, **not Docker Engine installation**. Next proposed command will show the package installation plan and confirmation prompt for official Docker Engine components: `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin`, and `docker-compose-plugin`.
+
+
+## 12. Docker Engine package installation — completed; runtime verification pending
+
+The user executed the official Docker package install command and confirmed the APT prompt:
+
+```bash
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+**APT transaction:** `0 upgraded, 7 newly installed, 0 to remove, 0 not upgraded`; downloaded 102 MB; projected additional disk usage 389 MB. The user entered `y` at the confirmation prompt.
+
+Installed packages and versions observed in the log:
+
+| Package | Version |
+| --- | --- |
+| `docker-ce` | `5:29.9.3-1~ubuntu.24.04~noble` |
+| `docker-ce-cli` | `5:29.9.3-1~ubuntu.24.04~noble` |
+| `containerd.io` | `2.4.2-3~ubuntu.24.04~noble` |
+| `docker-buildx-plugin` | `0.38.1-1~ubuntu.24.04~noble` |
+| `docker-compose-plugin` | `5.7.0-1~ubuntu.24.04~noble` |
+| `docker-ce-rootless-extras` | `5:29.9.3-1~ubuntu.24.04~noble` |
+| `pigz` | `2.8-1` |
+
+`docker.service`, `docker.socket`, and `containerd.service` systemd symlinks were created. Package installation returned to the Ubuntu shell prompt with no displayed errors. The package scan reported running kernel up to date; some unrelated service restarts were deferred.
+
+**Important verification boundary:** Successful APT package installation and creation of systemd symlinks do **not** prove Docker daemon readiness. Next command, not yet executed:
+
+```bash
+sudo docker version
+```
+
+Check both **Client** and **Server** sections; only then record daemon/CLI connectivity as verified. No container has been run and NVIDIA Triton has not yet been installed.
