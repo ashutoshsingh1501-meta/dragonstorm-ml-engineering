@@ -1091,3 +1091,16 @@ Review found the terminal-executed Dragon Storm milestones previously documented
 **Public-repository privacy decision:** Do not commit the unredacted raw transcript, as it contains infrastructure/network identifiers (including public IP), a Windows user-profile file path and SSH host fingerprint. No private-key file contents were present in the reviewed transcript. Retain the detailed sanitized engineering journal rather than publishing a raw session transcript.
 
 **Next functional milestone (pending):** Real ONNX image inference and interpretation of detection boxes/classes/scores; model readiness alone is not inference success.
+
+
+## 49. Azure Portal Stop (deallocate) verified — Day 1 complete
+
+After the successful ONNX model-specific readiness HTTP 200 checkpoint, the user provided Azure Portal screenshots of the stop action and its outcome. The final screenshot's **Overview > Essentials > Status** field explicitly reads **`Stopped (deallocated)`** for personal lab VM `vm-dragonstorm-ml-01` in Central India.
+
+**Verified:** The user completed Azure's Stop (deallocate) action; VM's displayed power state is **Stopped (deallocated)** at the time of the final screenshot. The prior `Running` screenshot and stop confirmation dialog were not mistaken for proof of completion. Azure VM compute billing stops while deallocated, but managed OS disk and applicable allocated network/IP/storage resources may continue to incur charges. Azure auto-shutdown had been temporarily disabled during setup; recommend restoring it for future days.
+
+**Day 1 completed evidence chain:** Ubuntu VM baseline and OS patches; Docker CE installation/hello-world; Triton image pull and CPU-only server launch; ONNX source artifact SHA-256 integrity check; isolated ONNX graph schema and checker; version-controlled `config.pbtxt` deployment; CPU ONNX Runtime backend initialization and model READY startup log; model-specific readiness endpoint returned HTTP 200; Azure portal deallocation confirmed.
+
+**Next session (pending, not tested):** Start the Azure VM; SSH back into the VM; inspect/resume the existing `triton-cpu` Docker container (no `--rm` or restart policy on the second launch); re-check model readiness; then construct a deterministic UINT8 NHWC image tensor for first CPU inference, examine detection tensors, and later render bounding boxes. Preserve one-command → user verifies → commit → next-command discipline. Do not claim actual inference or latency measurements have yet occurred.
+
+**Privacy:** Do not add raw Azure Portal screenshot to public GitHub: screenshots expose a personal subscription identifier, public networking information and account details. This sanitized journal entry intentionally omits those values.
