@@ -204,3 +204,21 @@ ls -ld /etc/apt/keyrings
 ```
 
 **Verification complete:** `ls -ld /etc/apt/keyrings/` returned `drwxr-xr-x 2 root root 4096 Mar 31 2024 /etc/apt/keyrings/`. Directory permissions are 0755 and ownership is `root:root`. The directory's 2024 timestamp is consistent with it preexisting today's command; no Docker GPG key or apt source has been configured yet.
+
+
+## 9. Docker apt signing key — file verified, authenticity pending
+
+User executed:
+
+```bash
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+ls -lh /etc/apt/keyrings/docker.asc
+```
+
+Observed listing:
+
+```text
+-rw-r--r-- 1 root root 3.8K Nov 4 15:15 /etc/apt/keyrings/docker.asc
+```
+
+The file is present with world-readable mode `0644`, suitable for reading by apt. **This listing proves the file was saved, not that the key is authentic.** The key fingerprint must be inspected and compared with the Docker-published fingerprint before trusting the repository. No Docker apt source or Docker Engine has been installed yet.
