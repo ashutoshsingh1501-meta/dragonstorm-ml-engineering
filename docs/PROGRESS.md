@@ -58,7 +58,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18f-1 | Triton container Python ONNX parser check | Complete | `sudo docker exec triton-cpu python3 -c 'import importlib.util; ...'` printed `ONNX package installed: False`; Triton ONNX Runtime shared-library backend remains present |
 | I-18f-2 | Ubuntu Python inspection tools | Complete | Host Python 3.12.3; `pip=False`, `venv=True`, `onnx=False` via `importlib.util.find_spec`; venv creation not yet tested |
 | I-18f-3 | Isolated ONNX inspection venv creation | Blocked | `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` failed: Ubuntu Python 3.12 `ensurepip` unavailable; install `python3.12-venv`, then retry and verify |
-| I-18f-4 | Install Ubuntu Python 3.12 venv support | **Pending** | Run `sudo apt install -y python3.12-venv` and inspect output before retrying virtual environment creation |
+| I-18f-4 | Install Ubuntu Python 3.12 venv support | Complete | `sudo apt install -y python3.12-venv`: installed python3.12-venv 3.12.3-1ubuntu0.17, python3-pip-whl 24.0+dfsg-1ubuntu1.3, python3-setuptools-whl 68.1.2-2ubuntu1.2; no containers require restart |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
