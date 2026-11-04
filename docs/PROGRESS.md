@@ -63,7 +63,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-18f-7 | Inspect ONNX graph and validate schema | Complete | onnx 1.19.1: IR 7, opset 12; input `inputs` UINT8 symbolic NHWC rank 4 (last dimension 3); outputs `detection_boxes` FLOAT [?,?,4], `detection_classes` FLOAT [?,?], `detection_scores` FLOAT [?,?], `num_detections` FLOAT [?]; ONNX checker PASSED |
 | I-18g | Commit initial Triton model config to GitHub | Complete (VM validation pending) | `model_repository/ssd_mobilenet_v1_12/config.pbtxt` committed with exact observed tensor names/types, max_batch_size 0, one KIND_CPU instance |
 | I-18h | Copy Triton config to Azure VM | Complete (contents pending verification) | `curl --fail --location --show-error --output .../ssd_mobilenet_v1_12/config.pbtxt` retrieved 1,069 bytes from GitHub raw URL without reported error; contents not yet inspected |
-| I-18i | Validate VM Triton config against GitHub | **Pending** | Inspect `config.pbtxt` on the VM, confirm backend, model name, exact tensor names/types/dims and KIND_CPU before controlled restart |
+| I-18i | Validate VM Triton config against GitHub | Complete (visual inspection) | User `cat` output matches the committed config fields: `ssd_mobilenet_v1_12`, onnxruntime, max_batch_size 0, UINT8 input `inputs`, four FP32 outputs, KIND_CPU x1; runtime load not yet checked |
+| I-18j | Controlled stop of empty Triton server | **Pending** | Stop existing `triton-cpu` container to reload repository containing the new model; do not claim model load until logs examined |
 | I-18f-4 | Install Ubuntu Python 3.12 venv support | Complete | `sudo apt install -y python3.12-venv`: installed python3.12-venv 3.12.3-1ubuntu0.17, python3-pip-whl 24.0+dfsg-1ubuntu1.3, python3-setuptools-whl 68.1.2-2ubuntu1.2; no containers require restart |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
