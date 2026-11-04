@@ -844,3 +844,22 @@ Both commands returned directly to the shell prompt, with **no terminal output o
 **Verified checkpoint:** The prior `ensurepip` error did not recur, and both attempted environment-creation commands completed without a reported error. **Still pending:** direct verification that the virtual environment's Python executable and `pip` work. This avoids treating a silent command as proof all tools are installed.
 
 **Next user command:** `~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip --version`. Once verified, install the ONNX parser into this **isolated venv**, not into system Python or the Triton server container; inspect actual model graph metadata before writing `config.pbtxt`.
+
+
+## 38. Python and pip inside isolated ONNX inspection venv — verified
+
+The user ran:
+
+```bash
+~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip --version
+```
+
+Observed exact output:
+
+```text
+pip 24.0 from /home/azureuser/dragonstorm-lab/.venv-onnx-inspect/lib/python3.12/site-packages/pip (python 3.12)
+```
+
+**Verified:** The venv-local Python interpreter successfully invokes `pip 24.0` from the virtual environment's Python 3.12 site-packages. The previous missing-`ensurepip` blocker has been resolved by installing `python3.12-venv` and recreating the environment. No dependency install inside the venv or ONNX graph inspection has yet been demonstrated.
+
+**Next single action (pending):** Install an explicitly version-pinned ONNX Python parser (`onnx==1.19.1`) using `~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip install 'onnx==1.19.1'`. This preserves separation from system Python and the already running CPU-only Triton container; validate installation from the user's output before inspecting real input/output tensor metadata.
