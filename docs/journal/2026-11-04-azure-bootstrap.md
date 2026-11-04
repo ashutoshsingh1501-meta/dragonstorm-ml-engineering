@@ -863,3 +863,24 @@ pip 24.0 from /home/azureuser/dragonstorm-lab/.venv-onnx-inspect/lib/python3.12/
 **Verified:** The venv-local Python interpreter successfully invokes `pip 24.0` from the virtual environment's Python 3.12 site-packages. The previous missing-`ensurepip` blocker has been resolved by installing `python3.12-venv` and recreating the environment. No dependency install inside the venv or ONNX graph inspection has yet been demonstrated.
 
 **Next single action (pending):** Install an explicitly version-pinned ONNX Python parser (`onnx==1.19.1`) using `~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip install 'onnx==1.19.1'`. This preserves separation from system Python and the already running CPU-only Triton container; validate installation from the user's output before inspecting real input/output tensor metadata.
+
+
+## 39. Isolated ONNX graph parser installation — verified
+
+User executed on the Azure VM:
+
+```bash
+~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m pip install 'onnx==1.19.1'
+```
+
+Package manager reported successful installation:
+
+```text
+Successfully installed ml_dtypes-0.6.0 numpy-2.5.4 onnx-1.19.1 protobuf-7.36.2 typing_extensions-4.16.0
+```
+
+**Verified:** ONNX 1.19.1 and its resolved dependencies installed successfully into the preexisting Python 3.12 virtual environment `.venv-onnx-inspect`. The observed wheel was `onnx-1.19.1-cp312-cp312-manylinux2014_x86_64`, consistent with this Linux x86_64 Python 3.12 host. The operation did not target the running Triton container or global system Python.
+
+**Reproducibility note:** Only `onnx` was explicitly pinned; dependencies were resolved to the listed versions by pip at installation time. For future exact reproducibility, capture an environment lock/freeze separately and keep records in GitHub without committing the local venv files.
+
+**Next verification pending:** Parse `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx` with the isolated ONNX parser, extract actual inputs/outputs, their dtypes and dimensions, opset and run `onnx.checker.check_model`. This installation outcome alone does not prove the ONNX graph is valid, the Triton backend loads, or inference works.
