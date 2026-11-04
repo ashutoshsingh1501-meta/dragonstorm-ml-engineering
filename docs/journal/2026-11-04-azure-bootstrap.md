@@ -771,3 +771,31 @@ onnx: False
 **Verified:** Ubuntu host uses Python **3.12.3**; importable `pip` is absent in that interpreter; the `venv` module can be found; and `onnx` has not yet been installed in host Python. Importable `venv` does **not** prove that a new virtual environment can successfully bootstrap pip; Ubuntu may require a version-specific `python3-venv` package.
 
 **Next single command planned:** `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect`. If it fails, preserve the error and address missing `ensurepip`/Ubuntu venv packages without modifying the running Triton container or system-wide Python packages. Do not claim ONNX graph inspection complete.
+
+
+## 35. Virtual environment creation failure — ensurepip missing (verified)
+
+The user ran on the Azure Ubuntu VM:
+
+```bash
+python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect
+```
+
+Actual failure:
+
+```text
+The virtual environment was not created successfully because ensurepip is not
+available.  On Debian/Ubuntu systems, you need to install the python3-venv
+package using the following command.
+
+    apt install python3.12-venv
+
+You may need to use sudo with that command.  After installing the python3-venv
+package, recreate your virtual environment.
+
+Failing command: /home/azureuser/dragonstorm-lab/.venv-onnx-inspect/bin/python3
+```
+
+**Status:** The venv creation attempt failed, so no functional isolated environment has been verified. It may have left a partial directory on the host. The missing `ensurepip` capability is consistent with a minimal Ubuntu Python 3.12 installation; this error does not demonstrate any failure of Docker, Triton server readiness, or the downloaded ONNX model.
+
+**Next corrective action pending:** Install distro package `python3.12-venv` with `sudo apt install -y python3.12-venv`, capture package-manager result, then retry `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect` as a separate checked action. Avoid installing ONNX into the host's externally managed system Python or mutating the live Triton container.
