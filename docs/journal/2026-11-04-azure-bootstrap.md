@@ -950,3 +950,24 @@ The displayed file agrees with the committed source at `model_repository/ssd_mob
 - Source provenance comment records model SHA-256 `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058`.
 
 **Evidence boundary:** This is verification of displayed file contents, not a byte-for-byte comparison of local vs. GitHub hashes and not Triton config parser or runtime acceptance. The original Triton 2.74.0 server was started in `MODE_NONE` with an empty repository and remains running from the preceding checkpoints. The ONNX model and configuration were created after startup. The next step should stop the old server in a controlled manner; `--rm` removes the stopped container. Then launch again with the same localhost-only port and mounted model repository, verify model load logs and readiness separately, and troubleshoot any CPU-provider load errors.
+
+
+## 43. Controlled stop of first empty-repository Triton server — verified
+
+The user executed:
+
+```bash
+sudo docker stop triton-cpu
+```
+
+Output:
+
+```text
+triton-cpu
+```
+
+**Verified:** Docker acknowledged the controlled stop of the previously running `triton-cpu` container. It had been launched with `--rm`, so container auto-removal is expected after stopping, but a separate `docker ps -a` check was not performed. The pulled image remains in the Docker cache, and the ONNX artifact/config reside in the host bind-mounted model repository, outside the deleted/stopped container.
+
+**Reason:** Triton was launched with `model_control_mode=MODE_NONE` while the model repository was empty. New ONNX model and `config.pbtxt` have since been added and visually checked; Triton must be restarted to scan and load them. No actual backend/model load is yet verified. Recreate the container with `127.0.0.1:8000:8000`, no GPU, read-only host model mount; collect the returned container ID, inspect `docker ps`, logs, model readiness and inference in separate verified steps.
+
+**Cost note:** Azure auto-shutdown remains Off during this session. Manually stop/deallocate the VM before ending and confirm `Stopped (deallocated)` in Azure Portal; an SSH container stop is not a VM stop.
