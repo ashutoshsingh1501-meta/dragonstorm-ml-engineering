@@ -38,7 +38,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-17a | Triton image registry manifest | Complete | `sudo docker manifest inspect nvcr.io/nvidia/tritonserver:26.10-py3` succeeded; tag accessible |
 | I-17b | Triton image pull | Complete | `docker pull nvcr.io/nvidia/tritonserver:26.10-py3` succeeded; digest `sha256:b404f7de5dbeeefe0b17d7d149745a50d0989a25d0d831433b5ba63c716c2fcd` |
-| I-17c | Triton image local size | **Pending** | Verify local image presence and actual reported image size via `sudo docker images nvcr.io/nvidia/tritonserver:26.10-py3` |
+| I-17c | Triton image local size | Complete | Docker 29.9.3 `images` reports image ID `b404f7de5dbe`, disk usage 26.5 GB, content size 9.45 GB |
+| I-17c-1 | Host free space after Triton pull | **Pending** | Run `df -h /var/lib/docker` again after image extraction |
 | I-17d | Triton server CPU launch | **Pending** | Confirm available backends and container startup before claiming success |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
