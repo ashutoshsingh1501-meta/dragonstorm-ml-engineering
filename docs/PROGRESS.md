@@ -42,11 +42,11 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17c-1 | Host free space after Triton pull | Complete | `df -h /var/lib/docker` reports `/dev/root` 123G total, **28G used**, **96G available**, 23% used (before pull 2.5G used / 121G free) |
 | I-17c-2 | Triton ONNX backend image inspection | Complete | Short-lived `docker run --rm --entrypoint /bin/ls ... -la /opt/tritonserver/backends/onnxruntime` listed ONNX backend shared libraries, OpenVINO CPU plugin, test tools; backend startup not yet tested |
 | I-17e | Triton model repository directory | Complete | `mkdir -p ~/dragonstorm-lab/model_repository && ls -ld ...` confirmed path, `azureuser` ownership, mode 0775; no model loaded yet |
-| I-17d | Triton server CPU launch | **Pending** | Background container was created; status, logs and health are not yet checked |
+| I-17d | Triton server CPU launch | Complete | Detached CPU-only container reported `Up 2 minutes`; Triton 2.74.0 HTTPService started and `/v2/health/ready` returned HTTP 200; model/backends not loaded |
 | I-17d-1 | Triton container launch accepted | Complete | `sudo docker run -d --rm --name triton-cpu ...` returned container ID prefix `4cac76c7c2b6`; no GPU requested; port 8000 bound to host localhost; read-only model mount |
 | I-17d-2 | Triton container running state | Complete | `sudo docker ps -a --filter name=triton-cpu`: container `4cac76c7c2b6` `Up 2 minutes`, HTTP port `127.0.0.1:8000->8000/tcp`; Triton health not yet checked |
 | I-17d-3 | Triton startup logs | Complete | Logs show NVIDIA Release 26.10, Triton 2.74.0, `Started HTTPService at 0.0.0.0:8000`; missing NVIDIA driver/CUDA warnings, no models/backends loaded |
-| I-17d-4 | Triton HTTP health | **Pending** | Request `http://127.0.0.1:8000/v2/health/ready` locally and inspect HTTP status |
+| I-17d-4 | Triton HTTP health | Complete | `curl -i --max-time 5 http://127.0.0.1:8000/v2/health/ready`: `HTTP/1.1 200 OK`, Content-Length: 0; Triton readiness verified, no inference tested |
 | I-17d-4 | Triton HTTP health | **Pending** | Inspect localhost `/v2/health/ready` after logs confirm startup |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
