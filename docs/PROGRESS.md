@@ -51,6 +51,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17d-5 | Triton v2 metadata endpoint | Complete | `curl -sS http://127.0.0.1:8000/v2` returned name `triton`, version `2.74.0`, and V2 extensions including model_repository, model_configuration, statistics and schedule_policy |
 | I-18a | Initial model repository listing | Complete | `ls -la ~/dragonstorm-lab/model_repository` contained only `.` and `..`, confirming the directory was empty before adding any model |
 | I-18b | First ONNX detector selection | **Pending** | Verify open-source license, source files, ONNX input/output structure and CPU inference suitability before download |
+| I-18c | First ONNX model versioned directory | Complete | `mkdir -p ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1 && ls -ld ...` verified `/home/azureuser/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1`, owner/group `azureuser`, mode 0775; model binary not downloaded |
+| I-18d | ONNX model artifact download | **Pending** | Download exact file from authoritative source, verify URL and record SHA-256 before model configuration |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
 ## Open verification items
