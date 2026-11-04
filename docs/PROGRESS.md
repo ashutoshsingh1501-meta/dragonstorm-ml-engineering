@@ -29,7 +29,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-15b | Docker apt signing key file | Complete | `docker.asc` downloaded (3.8 KB; root; mode `0644`); GPG fingerprint matches documented Docker CE key `9DC8...0EBFCD88` |
 | I-15c | Docker official APT repository configuration | Complete | `docker.sources` inspected: stable, `noble`, `amd64`, HTTPS, `Signed-By: /etc/apt/keyrings/docker.asc` |
 | I-15d | Docker repository metadata refresh | Complete | `sudo apt update` fetched Docker `noble InRelease` (48.5 KB) and `noble/stable amd64 Packages` (73.4 KB) without errors |
-| I-16 | Docker Engine | **Pending** | No install / verification evidence |
+| I-16 | Docker Engine packages | Complete | 7 packages installed via Docker official APT repo; Docker CE/CLI 29.9.3, containerd 2.4.2, Buildx 0.38.1, Compose 5.7.0 |
+| I-16a | Docker daemon and CLI communication | **Pending** | Run `sudo docker version` and verify both Client and Server are reported |
 | I-17 | NVIDIA Triton | **Pending** | No image download / server launch evidence |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
