@@ -884,3 +884,33 @@ Successfully installed ml_dtypes-0.6.0 numpy-2.5.4 onnx-1.19.1 protobuf-7.36.2 t
 **Reproducibility note:** Only `onnx` was explicitly pinned; dependencies were resolved to the listed versions by pip at installation time. For future exact reproducibility, capture an environment lock/freeze separately and keep records in GitHub without committing the local venv files.
 
 **Next verification pending:** Parse `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx` with the isolated ONNX parser, extract actual inputs/outputs, their dtypes and dimensions, opset and run `onnx.checker.check_model`. This installation outcome alone does not prove the ONNX graph is valid, the Triton backend loads, or inference works.
+
+
+## 40. ONNX graph inspection and checker — verified
+
+The user executed the previously recorded Python heredoc with isolated `onnx==1.19.1`, `onnx.load` and `onnx.checker.check_model` on the SHA-256-verified model at `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/1/model.onnx`.
+
+Observed exact output:
+
+```text
+ONNX version: 1.19.1
+IR version: 7
+Opsets: [('', 12)]
+
+INPUTS:
+  inputs: dtype=UINT8, shape=['unk__6578', 'unk__6579', 'unk__6580', 3]
+
+OUTPUTS:
+  detection_boxes: dtype=FLOAT, shape=['unk__6581', 'unk__6582', 4]
+  detection_classes: dtype=FLOAT, shape=['unk__6583', 'unk__6584']
+  detection_scores: dtype=FLOAT, shape=['unk__6585', 'unk__6586']
+  num_detections: dtype=FLOAT, shape=['unk__6587']
+
+ONNX GRAPH CHECK: PASSED
+```
+
+**Verified:** ONNX graph IR 7, opset 12, exact input and output tensor names, ONNX element types, symbolic dimensions and graph checker acceptance. The graph's input is rank 4 UINT8 NHWC (last dimension exactly 3); output detections carry FP32 data. The `unk__*` dimensions are *independent symbolic names* in the observed model and have not been proven equal across tensors; use a distinct `-1` for each symbolic dimension in Triton config. **Important:** These observed graph tensor names differ from names in the historic model documentation. Favor inspected binary metadata over the older descriptions.
+
+**Configuration artifact committed (not deployed yet):** `model_repository/ssd_mobilenet_v1_12/config.pbtxt` with `backend: "onnxruntime"`, `max_batch_size: 0`, UINT8 input dims `[-1,-1,-1,3]`, FP32 output dims `[-1,-1,4]`, `[-1,-1]`, `[-1,-1]`, `[-1]`, and a single `KIND_CPU` instance. Config uses no Triton-managed batching; full ONNX batch dimension is retained as an explicit dimension of each tensor. This is an initial hypothesis consistent with graph metadata, **not** yet evidence the ONNX Runtime backend can load or infer.
+
+**Next user action (pending):** Download the committed config file onto the personal VM next to the model's version directory; inspect content afterward, then controlled restart of Triton because the running server was started in `MODE_NONE`. Keep host HTTP bound to loopback and document any model-load errors.
