@@ -931,3 +931,22 @@ Observed curl progress: `100 1069 100 1069` bytes received with no reported erro
 **Verified:** Download command successfully transferred approximately 1,069 bytes into the intended local Triton model-configuration path, sourced from the version-controlled project configuration. **Not yet verified:** The actual content saved in the file, its exact match to the GitHub file, the config's acceptance by Triton, or model loading. The previously running Triton server is still using `MODE_NONE` and has **not** been restarted as part of this step.
 
 **Next checkpoint:** Review contents of `~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/config.pbtxt` with `cat` before a controlled restart. For exact provenance, a checksum comparison can be added after verifying content, but no hash was observed in this user response. Continue local-only network exposure.
+
+
+## 42. Azure VM Triton configuration inspected — verified by contents
+
+The user ran:
+
+```bash
+cat ~/dragonstorm-lab/model_repository/ssd_mobilenet_v1_12/config.pbtxt
+```
+
+The displayed file agrees with the committed source at `model_repository/ssd_mobilenet_v1_12/config.pbtxt` in all critical configuration fields:
+
+- `name: "ssd_mobilenet_v1_12"`, `backend: "onnxruntime"`, and `max_batch_size: 0` (no Triton-managed dynamic batching).
+- Input `inputs`, `TYPE_UINT8`, `dims: [-1, -1, -1, 3]`.
+- Four outputs all `TYPE_FP32`: `detection_boxes [-1, -1, 4]`, `detection_classes [-1, -1]`, `detection_scores [-1, -1]`, `num_detections [-1]`.
+- One CPU execution instance, `instance_group { count: 1 kind: KIND_CPU }`.
+- Source provenance comment records model SHA-256 `b8fba5e404077d4048d27fcd1667e85e27e192eb9bf51e696c46a3acd7d21058`.
+
+**Evidence boundary:** This is verification of displayed file contents, not a byte-for-byte comparison of local vs. GitHub hashes and not Triton config parser or runtime acceptance. The original Triton 2.74.0 server was started in `MODE_NONE` with an empty repository and remains running from the preceding checkpoints. The ONNX model and configuration were created after startup. The next step should stop the old server in a controlled manner; `--rm` removes the stopped container. Then launch again with the same localhost-only port and mounted model repository, verify model load logs and readiness separately, and troubleshoot any CPU-provider load errors.
