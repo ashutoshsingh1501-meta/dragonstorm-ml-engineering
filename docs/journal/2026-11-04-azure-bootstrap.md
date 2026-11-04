@@ -222,3 +222,25 @@ Observed listing:
 ```
 
 The file is present with world-readable mode `0644`, suitable for reading by apt. **Fingerprint verified afterward.** Command `gpg --show-keys --fingerprint /etc/apt/keyrings/docker.asc` reported RSA4096 primary key created 2017-02-22, UID `Docker Release (CE deb) <docker@docker.com>`, fingerprint `9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88`. This matches documented Docker CE repository key (also reproduced in NVIDIA's Docker setup instructions: https://docs.nvidia.com/ai-enterprise/deployment/vmware/latest/kubernetes.html). The command also created the local `~/.gnupg` directory/keybox, which is expected and not an error. Key file permissions were already readable (`0644`), so no chmod was needed. No Docker apt source or Docker Engine has been installed yet.
+
+
+## 10. Docker APT repository configuration — verified
+
+The user executed the Docker Ubuntu deb822 repository configuration command, which wrote `/etc/apt/sources.list.d/docker.sources`. The output was intentionally suppressed with `> /dev/null`. Subsequent inspection:
+
+```bash
+cat /etc/apt/sources.list.d/docker.sources
+```
+
+Observed content:
+
+```text
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: noble
+Components: stable
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/docker.asc
+```
+
+**Result:** The repository configuration is correctly formed for Ubuntu 24.04 (`noble`) on x86-64 and refers to the previously verified Docker signing key. **Pending:** `sudo apt update` to confirm that APT can fetch repository metadata and validate signatures. Docker Engine has not yet been installed.
