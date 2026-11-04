@@ -749,3 +749,25 @@ ONNX package installed: False
 **Interpretation:** The Python interpreter found inside the running `triton-cpu` container does **not** have the importable `onnx` Python graph-inspection package installed. This is **not** evidence that the Triton ONNX Runtime backend is unavailable: the separately inspected `/opt/tritonserver/backends/onnxruntime` contains its compiled runtime shared libraries. Parsing model metadata with `onnx` and serving an ONNX model with Triton ONNX Runtime are distinct tasks.
 
 **Approach:** Do not modify the running Triton service or install packages into its ephemeral container. Verify host Python packaging/virtual-environment availability, then use a dedicated isolated inspection environment to report the actual graph input and output tensor names, element types, dimensions and opset. Model loading and inference remain pending.
+
+
+## 34. Ubuntu host Python inspection environment availability — verified
+
+The user ran:
+
+```bash
+python3 -c 'import sys, importlib.util; print("Python:", sys.version.split()[0]); print("pip:", importlib.util.find_spec("pip") is not None); print("venv:", importlib.util.find_spec("venv") is not None); print("onnx:", importlib.util.find_spec("onnx") is not None)'
+```
+
+Observed exact output:
+
+```text
+Python: 3.12.3
+pip: False
+venv: True
+onnx: False
+```
+
+**Verified:** Ubuntu host uses Python **3.12.3**; importable `pip` is absent in that interpreter; the `venv` module can be found; and `onnx` has not yet been installed in host Python. Importable `venv` does **not** prove that a new virtual environment can successfully bootstrap pip; Ubuntu may require a version-specific `python3-venv` package.
+
+**Next single command planned:** `python3 -m venv ~/dragonstorm-lab/.venv-onnx-inspect`. If it fails, preserve the error and address missing `ensurepip`/Ubuntu venv packages without modifying the running Triton container or system-wide Python packages. Do not claim ONNX graph inspection complete.
