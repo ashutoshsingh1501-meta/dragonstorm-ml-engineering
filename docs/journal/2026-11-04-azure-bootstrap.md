@@ -495,3 +495,25 @@ Filesystem      Size  Used Avail Use% Mounted on
 **Result:** The VM has **96 GiB free** on the filesystem containing the Docker data root, compared with **121 GiB before the image pull**. This is suitable initial headroom for a small ONNX vision model and Triton exploratory work. The disk numbers are rounded; Docker-reported image size and filesystem-space delta need not match exactly.
 
 **Next proposed command (not yet executed):** inspect the ONNX Runtime backend directory in the downloaded Triton image using a short-lived container, without opening network ports or running the model server.
+
+
+## 22. Triton ONNX backend files — verified (not yet loaded)
+
+The user executed:
+
+```bash
+sudo docker run --rm --entrypoint /bin/ls nvcr.io/nvidia/tritonserver:26.10-py3 -la /opt/tritonserver/backends/onnxruntime
+```
+
+**Observed:** The container ran the `ls` process and returned a directory listing without reported errors. Notable files:
+
+- `libtriton_onnxruntime.so` — Triton ONNX Runtime backend library
+- `libonnxruntime.so`, `libonnxruntime.so.1.30.0` symlink — ONNX Runtime library
+- `libopenvino_intel_cpu_plugin.so` — OpenVINO CPU plugin
+- `libonnxruntime_providers_cuda.so`, `libonnxruntime_providers_tensorrt.so` — GPU-related provider libraries present in image (not proof GPU support on current VM)
+- `onnx_test_runner`, `onnxruntime_perf_test` — bundled testing tools
+- `ort_onnx_version.txt` — version metadata file (content not yet inspected)
+
+**Interpretation:** Files exist in the Triton container image. This does **not** demonstrate successful ONNX backend initialization, selected execution providers, loaded vision models, or inference. The temporary container did not launch the Triton server and did not publish network ports.
+
+**Next:** Prepare an empty local Triton model repository and test CPU-only Triton startup with localhost-bound endpoints before adding an open-source ONNX object detection model. For this personal learning environment, do not open Triton ports on the public Azure interface or add public NSG rules.
