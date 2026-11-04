@@ -45,7 +45,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | I-17d | Triton server CPU launch | **Pending** | Background container was created; status, logs and health are not yet checked |
 | I-17d-1 | Triton container launch accepted | Complete | `sudo docker run -d --rm --name triton-cpu ...` returned container ID prefix `4cac76c7c2b6`; no GPU requested; port 8000 bound to host localhost; read-only model mount |
 | I-17d-2 | Triton container running state | Complete | `sudo docker ps -a --filter name=triton-cpu`: container `4cac76c7c2b6` `Up 2 minutes`, HTTP port `127.0.0.1:8000->8000/tcp`; Triton health not yet checked |
-| I-17d-3 | Triton startup logs | **Pending** | Inspect `sudo docker logs --tail 100 triton-cpu` for initialization and errors |
+| I-17d-3 | Triton startup logs | Complete | Logs show NVIDIA Release 26.10, Triton 2.74.0, `Started HTTPService at 0.0.0.0:8000`; missing NVIDIA driver/CUDA warnings, no models/backends loaded |
+| I-17d-4 | Triton HTTP health | **Pending** | Request `http://127.0.0.1:8000/v2/health/ready` locally and inspect HTTP status |
 | I-17d-4 | Triton HTTP health | **Pending** | Inspect localhost `/v2/health/ready` after logs confirm startup |
 | I-18 | Vision inference | **Pending** | No model or inference evidence |
 
