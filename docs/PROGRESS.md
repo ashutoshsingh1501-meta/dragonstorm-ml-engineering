@@ -4,6 +4,9 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 ## Current milestone — 2026-11-06
 
+**Session pause:** Day 2 pause requested; deallocation not yet confirmed. User is exiting SSH and stopping VM from Azure Portal; verify status **Stopped (deallocated)** before marking shutdown complete. Resume with pending local COCO category ID 18 inspection. Full session terminal transcript supplied by user for personal reference; do not commit unredacted logs (they contain VM public IP/login metadata).
+
+
 **Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH and existing Triton container restart verified; container Up About a minute with localhost HTTP mapping. Model-specific HTTP readiness verified (200 OK) after VM reboot; first inference still pending. [Day 2 journal](journal/2026-11-06-day-2.md).
 
 | ID | Milestone | Status | Evidence |
