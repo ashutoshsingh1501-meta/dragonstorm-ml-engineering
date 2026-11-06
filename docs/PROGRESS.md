@@ -22,7 +22,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-06 | Verify real-photo input dependencies | Complete | Isolated Python 3.12 venv `importlib.util.find_spec('PIL')` returned False; Pillow not installed; actual image decoding/inference pending |
 | D2-07 | Install isolated Pillow decoder | Complete (pip installation) | Venv-local `python -m pip install 'Pillow==11.3.0'` downloaded Linux Python 3.12 wheel (6.6 MB) and reported `Successfully installed Pillow-11.3.0`; runtime import pending |
 | D2-07a | Verify Pillow import and version | Complete | User ran venv-local Python `import PIL`; `Pillow version: 11.3.0` and module path `/home/azureuser/dragonstorm-lab/.venv-onnx-inspect/lib/python3.12/site-packages/PIL/__init__.py` |
-| D2-08 | Download public test photograph | **Pending** | Fetch a reproducible public dog photograph from PyTorch Hub example images to the Azure VM; verify image decoding and dimensions separately; do not claim test prediction yet |
+| D2-08 | Download public test photograph | Complete (curl transfer) | `curl --fail --location --show-error` downloaded approximately 645 KB from PyTorch Hub `images/dog.jpg` to `~/dragonstorm-lab/test-dog.jpg` without reported error; image format and decode unverified |
+| D2-08a | Validate downloaded test photo with Pillow | **Pending** | Verify actual image format, original dimensions, color mode and RGB conversion; avoid assuming original file size or colors |
 | D2-05 | First actual model inference | Complete (synthetic smoke test only) | CPU inference POST succeeded on deterministic black image; returned four correctly decoded FP32 tensors; real-photo object detection and accuracy remain pending |
 | I-01 | Separate personal Azure subscription | Complete | Active Azure subscription with Owner role confirmed in portal |
 | I-02 | Compute resource provider registration | Complete | `Microsoft.Compute` Registered |
