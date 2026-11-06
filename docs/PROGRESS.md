@@ -27,7 +27,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-08b | Verify first photo preprocessing tensor | Complete | Pillow RGB JPEG resize 300×300 BILINEAR and NumPy expand_dims produced UINT8 [1,300,300,3], 270000 bytes, pixel min 1 max 255, 270000 nonzero, `IMAGE PREPROCESSING: PASSED`; stretch can distort aspect ratio |
 | D2-08c | Author real-photo inference script | Complete (not run) | `scripts/real_photo_triton_inference.py` committed with Pillow RGB resize [1,300,300,3], binary Triton inference request, four FP32 tensor validation and top-5 raw score summary; runtime test pending |
 | D2-08d | Download real-photo inference script to VM | Complete (transfer verified) | User's `curl --fail --location --show-error` transferred exactly 5,867 bytes to `~/dragonstorm-lab/real_photo_triton_inference.py`; no reported error; syntax/runtime untested |
-| D2-08e | Syntax-check real-photo inference script | **Pending** | Run venv-local Python `-m py_compile` and verify success before attempting real photo Triton inference |
+| D2-08e | Syntax-check real-photo inference script | Complete | User executed venv-local Python `-m py_compile ~/dragonstorm-lab/real_photo_triton_inference.py`; shell printed `REAL PHOTO SCRIPT SYNTAX: PASSED` |
+| D2-08f | First real-photo Triton CPU inference | **Pending** | Execute syntax-verified script on dog JPEG and inspect HTTP response, four FP32 tensors, raw detection scores/classes/boxes; quality not yet validated |
 | D2-05 | First actual model inference | Complete (synthetic smoke test only) | CPU inference POST succeeded on deterministic black image; returned four correctly decoded FP32 tensors; real-photo object detection and accuracy remain pending |
 | I-01 | Separate personal Azure subscription | Complete | Active Azure subscription with Owner role confirmed in portal |
 | I-02 | Compute resource provider registration | Complete | `Microsoft.Compute` Registered |
