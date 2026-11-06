@@ -4,25 +4,14 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 ## Current milestone — 2026-11-06
 
-**Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH, Triton restart and model readiness after VM restart not yet verified. [Day 2 journal](journal/2026-11-06-day-2.md).
+**Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH verified; Docker container confirmed stopped with exit code 0. Triton restart and model readiness after VM reboot not yet verified. [Day 2 journal](journal/2026-11-06-day-2.md).
 
 | ID | Milestone | Status | Evidence |
 | --- | --- | --- | --- |
 | D2-01 | Azure VM started for Day 2 | Complete | Azure Portal success toast and Overview status `Running` for `vm-dragonstorm-ml-01` on 2026-11-06; guest-agent status showed transient/unverified warning |
-| D2-02 | Re-establish secure SSH session | Complete | User's 2026-11-06 Windows PowerShell screenshot shows successful SSH authentication, Ubuntu 24.04.5 banner and `azureuser@vm-dragonstorm-ml-01:~# Engineering Progress Tracker
-
-This file records **verified outcomes only**. Planned actions are explicitly marked pending. For detailed commands and evidence, follow the dated journal.
-
-## Current milestone — 2026-11-06
-
-**Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH, Triton restart and model readiness after VM restart not yet verified. [Day 2 journal](journal/2026-11-06-day-2.md).
-
-| ID | Milestone | Status | Evidence |
-| --- | --- | --- | --- |
-| D2-01 | Azure VM started for Day 2 | Complete | Azure Portal success toast and Overview status `Running` for `vm-dragonstorm-ml-01` on 2026-11-06; guest-agent status showed transient/unverified warning |
- prompt; preceding placeholder-host attempt generated expected resolution failure |
+| D2-02 | Re-establish secure SSH session | Complete | User's Windows PowerShell screenshot showed a successful Ubuntu shell login to the lab VM |
 | D2-02a | Review Azure Advisor VMSS Flex suggestion | Complete (no migration) | Azure Advisor Reliability/Medium suggested migrating standalone VM to VM Scale Sets Flex; this is an optional HA/scale recommendation, not a required change for a personal single-VM CPU inference lab; defer without provisioning extra VMs |
-| D2-03 | Inspect/resume Triton Docker container | **Pending** | Docker and container status must be checked after VM cold start |
+| D2-03 | Inspect/resume Triton Docker container | In progress | `sudo docker ps -a --filter name=triton-cpu` shows retained container `897812b33dde`, `Exited (0) 32 hours ago` after prior Azure deallocation; restart and readiness pending |
 | D2-04 | Recheck model-specific HTTP readiness | **Pending** | Verify `/v2/models/ssd_mobilenet_v1_12/ready` on localhost after service restart |
 | D2-05 | First actual model inference | **Pending** | Send UINT8 NHWC image tensor and inspect output tensors before any accuracy/performance claims |
 | I-01 | Separate personal Azure subscription | Complete | Active Azure subscription with Owner role confirmed in portal |
