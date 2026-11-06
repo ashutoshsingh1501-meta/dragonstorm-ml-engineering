@@ -14,7 +14,9 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-03 | Inspect/resume Triton Docker container | In progress | After initially verifying retained container `897812b33dde` as Exited (0), `sudo docker start triton-cpu` returned `triton-cpu`; running state and model HTTP readiness not yet checked |
 | D2-03a | Confirm Triton running after restart | Complete | `sudo docker ps -a --filter name=triton-cpu` showed existing `897812b33dde` container **Up About a minute**, HTTP host mapping `127.0.0.1:8000->8000/tcp`; model-specific readiness pending |
 | D2-04 | Recheck model-specific HTTP readiness | Complete | After Azure VM cold start and Docker restart, `curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready` returned `HTTP/1.1 200 OK`, `Content-Length: 0` |
-| D2-04a | Inspect V2 live model metadata | **Pending** | Query `GET /v2/models/ssd_mobilenet_v1_12` to confirm live input/output metadata before constructing first inference request |
+| D2-04a | Inspect V2 live model metadata | Complete | `GET /v2/models/ssd_mobilenet_v1_12`: name `ssd_mobilenet_v1_12`, version 1, platform `onnxruntime_onnx`; `inputs` UINT8 [-1,-1,-1,3]; FP32 outputs: boxes [-1,-1,4], classes [-1,-1], scores [-1,-1], num_detections [-1]; consistent with graph/config |
+| D2-04b | Author reproducible first V2 inference smoke client | Complete (authored, not executed) | `scripts/first_triton_inference.py` committed; synthetic black 1x300x300x3 UINT8, V2 binary tensor request, FP32 output decoding; API execution still pending |
+| D2-04c | Download smoke client to Azure VM | **Pending** | Fetch version-controlled script via GitHub raw URL; inspect/test on VM separately before actual first inference |
 | D2-05 | First actual model inference | **Pending** | Send UINT8 NHWC image tensor and inspect output tensors before any accuracy/performance claims |
 | I-01 | Separate personal Azure subscription | Complete | Active Azure subscription with Owner role confirmed in portal |
 | I-02 | Compute resource provider registration | Complete | `Microsoft.Compute` Registered |
