@@ -18,8 +18,9 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-04b | Author reproducible first V2 inference smoke client | Complete (authored, not executed) | `scripts/first_triton_inference.py` committed; synthetic black 1x300x300x3 UINT8, V2 binary tensor request, FP32 output decoding; API execution still pending |
 | D2-04c | Download smoke client to Azure VM | Complete (transfer observed) | `curl --fail --location --show-error` downloaded 5,041 bytes to `~/dragonstorm-lab/first_triton_inference.py` without reported errors; local file syntax and hash not yet validated |
 | D2-04d | Syntax-check downloaded inference client | Complete | `~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m py_compile ~/dragonstorm-lab/first_triton_inference.py` succeeded; shell printed `PYTHON SYNTAX CHECK: PASSED`; no inference ran |
-| D2-04e | First Triton V2 CPU inference smoke test | **Pending** | Execute the downloaded, syntax-verified Python client using isolated venv; check HTTP status and four FP32 output tensors; do not claim prediction quality from synthetic input |
-| D2-05 | First actual model inference | **Pending** | Send UINT8 NHWC image tensor and inspect output tensors before any accuracy/performance claims |
+| D2-04e | First Triton V2 CPU inference smoke test | Complete | Executed `first_triton_inference.py` in isolated venv: HTTP 200; UINT8 [1,300,300,3] 270000-byte payload; four FP32 tensors decoded (boxes [1,100,4], classes [1,100], scores [1,100], count [1]); all finite; count 0 on synthetic black input; SMOKE TEST PASSED |
+| D2-06 | Verify real-photo input dependencies | **Pending** | Check whether Pillow is available in isolated venv before implementing public-image decoding/preprocessing; no real photograph inferred yet |
+| D2-05 | First actual model inference | Complete (synthetic smoke test only) | CPU inference POST succeeded on deterministic black image; returned four correctly decoded FP32 tensors; real-photo object detection and accuracy remain pending |
 | I-01 | Separate personal Azure subscription | Complete | Active Azure subscription with Owner role confirmed in portal |
 | I-02 | Compute resource provider registration | Complete | `Microsoft.Compute` Registered |
 | I-03 | Central India quota inspection | Complete | Regional quota 4 vCPUs; VM family quotas inspected |
