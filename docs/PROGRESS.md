@@ -4,7 +4,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 ## Current milestone — 2026-11-06
 
-**Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH and existing Triton container restart verified; container Up About a minute with localhost HTTP mapping. Model-specific readiness after VM reboot not yet verified. [Day 2 journal](journal/2026-11-06-day-2.md).
+**Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH and existing Triton container restart verified; container Up About a minute with localhost HTTP mapping. Model-specific HTTP readiness verified (200 OK) after VM reboot; first inference still pending. [Day 2 journal](journal/2026-11-06-day-2.md).
 
 | ID | Milestone | Status | Evidence |
 | --- | --- | --- | --- |
@@ -13,7 +13,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-02a | Review Azure Advisor VMSS Flex suggestion | Complete (no migration) | Azure Advisor Reliability/Medium suggested migrating standalone VM to VM Scale Sets Flex; this is an optional HA/scale recommendation, not a required change for a personal single-VM CPU inference lab; defer without provisioning extra VMs |
 | D2-03 | Inspect/resume Triton Docker container | In progress | After initially verifying retained container `897812b33dde` as Exited (0), `sudo docker start triton-cpu` returned `triton-cpu`; running state and model HTTP readiness not yet checked |
 | D2-03a | Confirm Triton running after restart | Complete | `sudo docker ps -a --filter name=triton-cpu` showed existing `897812b33dde` container **Up About a minute**, HTTP host mapping `127.0.0.1:8000->8000/tcp`; model-specific readiness pending |
-| D2-04 | Recheck model-specific HTTP readiness | **Pending** | Verify `/v2/models/ssd_mobilenet_v1_12/ready` on localhost after service restart |
+| D2-04 | Recheck model-specific HTTP readiness | Complete | After Azure VM cold start and Docker restart, `curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready` returned `HTTP/1.1 200 OK`, `Content-Length: 0` |
+| D2-04a | Inspect V2 live model metadata | **Pending** | Query `GET /v2/models/ssd_mobilenet_v1_12` to confirm live input/output metadata before constructing first inference request |
 | D2-05 | First actual model inference | **Pending** | Send UINT8 NHWC image tensor and inspect output tensors before any accuracy/performance claims |
 | I-01 | Separate personal Azure subscription | Complete | Active Azure subscription with Owner role confirmed in portal |
 | I-02 | Compute resource provider registration | Complete | `Microsoft.Compute` Registered |
