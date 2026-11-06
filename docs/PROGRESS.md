@@ -4,7 +4,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 ## Current milestone — 2026-11-06
 
-**Session pause:** Day 2 pause requested; deallocation not yet confirmed. User is exiting SSH and stopping VM from Azure Portal; verify status **Stopped (deallocated)** before marking shutdown complete. Resume with pending local COCO category ID 18 inspection. Full session terminal transcript supplied by user for personal reference; do not commit unredacted logs (they contain VM public IP/login metadata).
+**Session pause:** Day 2 paused and Azure Portal Overview screenshot **verified VM `vm-dragonstorm-ml-01` status `Stopped (deallocated)`**. Compute deallocated; disk and networking resource charges may persist. Resume with pending local COCO category ID 18 inspection after VM startup/SSH, Triton restart and readiness recheck. Full terminal transcript is user-provided reference only; do not commit unredacted logs containing VM public IP/login metadata.
 
 
 **Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH and existing Triton container restart verified; container Up About a minute with localhost HTTP mapping. Model-specific HTTP readiness verified (200 OK) after VM reboot; first inference still pending. [Day 2 journal](journal/2026-11-06-day-2.md).
@@ -40,6 +40,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-09d-3 | Inspect ONNX model metadata for embedded category map | Complete | ONNX `metadata_props` length 0; model doc string empty; graph doc string `converted from ssd_mobilenet_v1_coco_2018_01_28/saved_model`; no label mapping in standard model metadata |
 | D2-09d-4 | Download TensorFlow Object Detection API COCO label map | Complete (curl transfer) | User downloaded TensorFlow models `research/object_detection/data/mscoco_label_map.pbtxt` to VM; curl transferred exactly 5,056 bytes without reported error; content not inspected yet |
 | D2-09d-5 | Inspect source label-map entry for model class 18 | **Pending** | Read actual `item { id: 18 ... }` block from local `.pbtxt`, compare numeric indexing and label fields before assigning any object label |
+| D2-10 | End-of-Day-2 VM deallocation | Complete | User-supplied Azure Portal Overview screenshot explicitly shows `vm-dragonstorm-ml-01` status `Stopped (deallocated)`; compute deallocation confirmed, persistent resource costs may remain |
 | D2-09e | Verify native-resolution input on Triton | **Pending** | README says no fixed H/W and shows preprocessing without resize, but runtime success on 1546x1213 original RGB image must be tested separately before claiming support |
 | D2-09a | Retrieve original model README | Complete (curl transfer) | Downloaded 8,818 bytes via `curl --fail --location --show-error` into `~/dragonstorm-lab/ssd-mobilenet-upstream-readme.md`; transfer succeeded; source content not yet read |
 | D2-09b | Inspect model README for label/box metadata | Complete (partial semantics) | grep shows README line 86: boxes top,left,bottom,right relative to image; line 90: detection_classes COCO label index; line 108: `coco_classes[c]` but label-map definition not yet identified |
