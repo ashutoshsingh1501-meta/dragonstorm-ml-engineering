@@ -2,12 +2,15 @@
 
 This file records **verified outcomes only**. Planned actions are explicitly marked pending. For detailed commands and evidence, follow the dated journal.
 
-## Current milestone — 2026-11-06
+## Current milestone — 2026-11-07 (Day 3)
 
-**Session pause:** Day 2 paused and Azure Portal Overview screenshot **verified VM `vm-dragonstorm-ml-01` status `Stopped (deallocated)`**. Compute deallocated; disk and networking resource charges may persist. Resume with pending local COCO category ID 18 inspection after VM startup/SSH, Triton restart and readiness recheck. Full terminal transcript is user-provided reference only; do not commit unredacted logs containing VM public IP/login metadata.
+**Stage:** First real photograph CPU inference **verified** on 2026-11-06 (HTTP 200, one candidate with raw class ID 18, score 0.969433). **Day 3 startup verified:** Azure VM hostname matched, Docker active, existing Triton container up, model-specific HTTP readiness 200, isolated Python + Pillow 11.3.0 import succeeded. Three connection resets occurred *during startup* before readiness succeeded; no current service failure observed. Native image resolution, COCO class ID 18 semantic mapping, and annotated output remain pending.
 
+**Session handling:** Batch standard startup/shutdown commands are preferred for efficiency; new or uncertain experiments still use checkable steps. Azure VM **running**; stop/deallocate at session end. [Day 2 journal](journal/2026-11-06-day-2.md) · [Day 3 journal](journal/2026-11-07-day-3.md).
 
-**Stage:** Day 1 Docker/Triton CPU ONNX model load and model-specific HTTP readiness **verified**, actual image inference **pending**. Day 1 Azure Stop (deallocate) **verified**; Day 2 VM Start completed (**Running**). SSH and existing Triton container restart verified; container Up About a minute with localhost HTTP mapping. Model-specific HTTP readiness verified (200 OK) after VM reboot; first inference still pending. [Day 2 journal](journal/2026-11-06-day-2.md).
+| D3-01 | Restart VM, existing Triton and verify readiness | Complete | User reported hostname `vm-dragonstorm-ml-01`, Docker `active`, Triton container `Up`, startup transient curl resets followed by `TRITON MODEL: READY` and final HTTP 200 |
+| D3-02 | Verify Python environment after restart | Complete | User output `Python environment: READY`, Pillow 11.3.0 |
+| D3-03 | Inspect local COCO label map ID 18 | **Pending** | Inspect local downloaded `mscoco_label_map.pbtxt` source and ID 17–19 blocks before assigning class label |
 
 | ID | Milestone | Status | Evidence |
 | --- | --- | --- | --- |
