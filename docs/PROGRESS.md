@@ -10,7 +10,9 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 
 | D3-01 | Restart VM, existing Triton and verify readiness | Complete | User reported hostname `vm-dragonstorm-ml-01`, Docker `active`, Triton container `Up`, startup transient curl resets followed by `TRITON MODEL: READY` and final HTTP 200 |
 | D3-02 | Verify Python environment after restart | Complete | User output `Python environment: READY`, Pillow 11.3.0 |
-| D3-03 | Inspect local COCO label map ID 18 | **Pending** | Inspect local downloaded `mscoco_label_map.pbtxt` source and ID 17–19 blocks before assigning class label |
+| D3-03 | Inspect local COCO label map ID 18 | Complete | Actual TensorFlow PBtxt blocks reported `17=cat`, `18=dog`, `19=horse`; notebook established 1-based COCO indexing, and output box order is normalized top,left,bottom,right |
+| D3-04 | Author annotated detection script | Complete (authored, not run) | Version-controlled `scripts/annotate_triton_detection.py` validates source map IDs, calls real-photo Triton client, draws normalized box on original JPEG; output `test-dog-annotated.jpg` is VM-local |
+| D3-05 | Download annotation script to VM | **Pending** | Fetch script from public repo; syntax-check and execute in subsequent checkpoints |
 
 | ID | Milestone | Status | Evidence |
 | --- | --- | --- | --- |
@@ -42,7 +44,7 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D2-09d-2 | Inspect notebook code cells for class map | Complete (partial map) | JSON parsed and targeted code search found only cell 23; mapping 1:person, 2:bicycle, 3:car, 4:motorcycle, 5:airplane, 6:bus, 7:train, 8:truck, 9:boat, 10:traffic light; no 18 |
 | D2-09d-3 | Inspect ONNX model metadata for embedded category map | Complete | ONNX `metadata_props` length 0; model doc string empty; graph doc string `converted from ssd_mobilenet_v1_coco_2018_01_28/saved_model`; no label mapping in standard model metadata |
 | D2-09d-4 | Download TensorFlow Object Detection API COCO label map | Complete (curl transfer) | User downloaded TensorFlow models `research/object_detection/data/mscoco_label_map.pbtxt` to VM; curl transferred exactly 5,056 bytes without reported error; content not inspected yet |
-| D2-09d-5 | Inspect source label-map entry for model class 18 | **Pending** | Read actual `item { id: 18 ... }` block from local `.pbtxt`, compare numeric indexing and label fields before assigning any object label |
+| D2-09d-5 | Inspect source label-map entry for model class 18 | Complete on Day 3 | Local TensorFlow PBtxt source verified IDs: 17 cat, 18 dog, 19 horse; raw detected class 18 maps to dog under this COCO convention |
 | D2-10 | End-of-Day-2 VM deallocation | Complete | User-supplied Azure Portal Overview screenshot explicitly shows `vm-dragonstorm-ml-01` status `Stopped (deallocated)`; compute deallocation confirmed, persistent resource costs may remain |
 | D2-09e | Verify native-resolution input on Triton | **Pending** | README says no fixed H/W and shows preprocessing without resize, but runtime success on 1546x1213 original RGB image must be tested separately before claiming support |
 | D2-09a | Retrieve original model README | Complete (curl transfer) | Downloaded 8,818 bytes via `curl --fail --location --show-error` into `~/dragonstorm-lab/ssd-mobilenet-upstream-readme.md`; transfer succeeded; source content not yet read |
