@@ -12,7 +12,8 @@ This file records **verified outcomes only**. Planned actions are explicitly mar
 | D3-02 | Verify Python environment after restart | Complete | User output `Python environment: READY`, Pillow 11.3.0 |
 | D3-03 | Inspect local COCO label map ID 18 | Complete | Actual TensorFlow PBtxt blocks reported `17=cat`, `18=dog`, `19=horse`; notebook established 1-based COCO indexing, and output box order is normalized top,left,bottom,right |
 | D3-04 | Author annotated detection script | Complete (authored, not run) | Version-controlled `scripts/annotate_triton_detection.py` validates source map IDs, calls real-photo Triton client, draws normalized box on original JPEG; output `test-dog-annotated.jpg` is VM-local |
-| D3-05 | Download annotation script to VM | **Pending** | Fetch script from public repo; syntax-check and execute in subsequent checkpoints |
+| D3-05 | Download annotation script to VM | Complete (curl transfer) | User fetched `scripts/annotate_triton_detection.py` to `~/dragonstorm-lab/annotate_triton_detection.py`; `curl` reported 5,569 bytes transferred, no error; syntax and runtime pending |
+| D3-06 | Verify annotation client syntax | **Pending** | Compile downloaded script using isolated Python venv before execution; inspect errors if any |
 
 | ID | Milestone | Status | Evidence |
 | --- | --- | --- | --- |
