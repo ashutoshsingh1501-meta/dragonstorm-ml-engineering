@@ -54,3 +54,12 @@ The initial cloud lab must provide an actual, reproducible **CPU inference basel
 
 - [Engineering progress](../PROGRESS.md)
 - [2026-11-04 lab journal](../journal/2026-11-04-azure-bootstrap.md)
+
+
+## Implementation-status addendum — 2026-11-13
+
+The original decision still stands. **Subsequent verification:** Docker Engine, Triton 2.74.0, ONNX CPU serving, localhost V2 inference, dog-image annotation, ONNX preprocessing trace and exploratory concurrency/latency benchmarking have all been executed. See [current tracker](../PROGRESS.md) and [Nov 12–13 journal](../journal/2026-11-13-triton-preprocessing-benchmark.md). GPU, dynamic batching, infrastructure-as-code, training, and production observability remain untested.
+
+**Operational incident:** An ISP-assigned home public IP changed; the restricted Azure NSG SSH rule still referenced the old source, causing SSH refusal. The user updated the rule to **My IP Address** and confirmed a successful SSH login. SSH service/socket diagnostics were collected, but inactive socket-activated `ssh.service` was *not* independently proven to be the cause.
+
+**Cost-control distinction:** The portal screenshot verified **Stopped (deallocated)** at the end of November 7, but no November 13 deallocation verification was supplied. Original ADR intended 20:00 IST auto-shutdown; setup had it temporarily turned off. Its eventual re-enablement is still pending evidence. SSH `exit` does not deallocate the Azure VM.
