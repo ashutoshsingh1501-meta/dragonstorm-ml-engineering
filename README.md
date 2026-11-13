@@ -128,6 +128,7 @@ Each experiment should answer:
 The authoritative records are the **verified milestone tracker** and **chronological engineering journal**, including failures, corrective actions, exact commands and observed results. [Nov 12–13 preprocessing and CPU benchmark journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md) and [terminal-transcribed JSON](docs/experiments/2026-11-13-cpu-baseline.json) are the latest records.
 
 - [Progress tracker](docs/PROGRESS.md)
+- [Operations, SSH recovery, reproducible commands and cost controls](docs/OPERATIONS.md)
 - [Day 1: Azure, Docker, Triton and ONNX bootstrap journal](docs/journal/2026-11-04-azure-bootstrap.md)
 - [Day 2: First inference client and real-photo test](docs/journal/2026-11-06-day-2.md)
 - [Day 3: COCO class mapping and annotation setup](docs/journal/2026-11-07-day-3.md)
@@ -143,6 +144,7 @@ Experiment records distinguish **observations**, **inferences**, and **hypothese
 README.md
 docs/
   PROGRESS.md
+  OPERATIONS.md
   decisions/ADR-001-personal-azure-cloud-first.md
   journal/
     2026-11-04-azure-bootstrap.md
@@ -160,6 +162,8 @@ scripts/
   compare_preprocessing.py
   inspect_onnx_preprocessing.py
   benchmark_triton.py
+  check_triton_lab.sh
+  diagnose_ssh_guest.sh
 ```
 
 **Artifacts kept on VM, not GitHub:** downloaded third-party ONNX model binary, test JPEG, annotated output JPEG, COCO label map, local virtualenv, original benchmark JSON and experimental visual JPG outputs. Repository JSON is explicitly a transcription from terminal stdout.
