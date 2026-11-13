@@ -6,7 +6,7 @@ A public, hands-on engineering and learning journal covering the lifecycle of AI
 
 This is an **independent, greenfield lab** running on a personally owned Microsoft Azure subscription. It uses original project material, open-source tools, and public or synthetic data; it is not a reconstruction of any employer's proprietary systems.
 
-> **Latest verified checkpoint — November 13, 2026:** Real-image Triton CPU inference and annotated dog JPEG validated; ONNX-internal asymmetric resizing and pixel normalization investigated; A/B/C preprocessing experiment completed; first sequential and concurrency CPU benchmark completed. **300×300 baseline:** p50 **27.624 ms**, p95 **30.251 ms**, throughput **35.49 RPS** (30 requests). At 1/2/4 concurrent clients throughput ~**35.95/36.90/36.85 RPS** while mean latency rose ~**27.5/52.7/100.7 ms**. Exploratory local-only measurements, not production benchmarks. Azure VM **final Nov 13 deallocation not verified**. See [tracker](docs/PROGRESS.md), [journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md), [benchmark results](docs/experiments/2026-11-13-cpu-baseline.json).
+> **Latest verified checkpoint — November 13, 2026:** Real-image Triton CPU inference and annotated dog JPEG validated; ONNX-internal asymmetric resizing and pixel normalization investigated; A/B/C preprocessing experiment completed; first sequential and concurrency CPU benchmark completed. **300×300 baseline:** p50 **27.624 ms**, p95 **30.251 ms**, throughput **35.49 RPS** (30 requests). At 1/2/4 concurrent clients throughput ~**35.95/36.90/36.85 RPS** while mean latency rose ~**27.5/52.7/100.7 ms**. Exploratory local-only measurements, not production benchmarks. Azure VM **Nov 13 deallocation verified in Azure Portal**. See [tracker](docs/PROGRESS.md), [journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md), [benchmark results](docs/experiments/2026-11-13-cpu-baseline.json).
 
 ## Current lab architecture
 
@@ -75,7 +75,7 @@ See the full [phase/milestone tracker](docs/PROGRESS.md). Each phase has a testa
 
 | Phase | Outcome | Status as of Nov 13 |
 | --- | --- | --- |
-| 00 Lab foundation | Personal Azure, safe SSH, Docker, cost discipline | VM/Docker/SSH working; auto-shutdown setup and Nov 13 final deallocation **unverified** |
+| 00 Lab foundation | Personal Azure, safe SSH, Docker, cost discipline | VM/Docker/SSH working; Nov 13 manual deallocation **verified**; auto-shutdown re-enablement unverified |
 | 01 First vision inference | Real detection output + visualization | **Functional smoke test complete**, single dog photo annotated |
 | 02 Model evaluation | Multi-image labels, IoU, precision/recall/mAP and failure analysis | **Not started** |
 | 03 Model training | Train or tune a model, tracked experiment | **Not started** |
