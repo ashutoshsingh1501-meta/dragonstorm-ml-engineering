@@ -53,6 +53,6 @@ An HTTP 200 readiness probe verifies model status, **not** model correctness. Tr
 
 1. Preserve measured results on VM and commit source/documentation separately. Never check in the downloaded ONNX binary, private credentials or sensitive logs.
 2. Close SSH with `exit`.
-3. In Azure Portal **Stop (deallocate)** and verify **Stopped (deallocated)**. SSH exit alone leaves billing compute active. November 13 end-state remains **unverified** in supplied evidence.
+3. In Azure Portal **Stop (deallocate)** and verify **Stopped (deallocated)**. SSH exit alone leaves billing compute active. November 13 end-state was **verified** by an Azure Portal screenshot showing **Stopped (deallocated)** after the user closed the SSH session; always repeat this verification after future sessions.
 4. Restore a safe auto-shutdown policy if desired; original ADR proposed 20:00 IST but evidence shows it was turned off during bootstrap. No claim that it has been restored.
 5. Ubuntu Nov 12 banner reported 14 available updates (12 standard security). Schedule controlled upgrade/reboot/health recheck rather than changing packages during timed benchmarking.
