@@ -1,8 +1,46 @@
 # Engineering Progress Tracker
 
+> **Current state — November 13, 2026:** First real-image detection, COCO label mapping, annotation and visual inspection **verified**; ONNX internal preprocessing investigation and A/B/C prediction comparison **verified**; CPU loopback benchmark **completed**. The latest results are from 24–30 measured calls/configuration, not SLA-quality statistics. **VM final deallocation after the November 13 lab is not verified.** The original chronological milestone entries follow below and retain their *at-the-time* statuses; this current-state reconciliation supersedes stale “pending” text in older entries.
+
+**Evidence:** [Nov 12–13 lab journal](journal/2026-11-13-triton-preprocessing-benchmark.md) · [Measured results transcribed from terminal stdout](experiments/2026-11-13-cpu-baseline.json) · [Model notes](models/ssd-mobilenetv1-12-source-notes.md).
+
+## Current reconciled checkpoints
+
+| ID | Actual status | Evidence |
+|---|---|---|
+| D3-06 annotation Python syntax | **Complete** | `ANNOTATION SCRIPT SYNTAX: PASSED` on Nov 7 |
+| D3-07 annotation runtime | **Complete** | Triton HTTP 200, dog ID 18, score 0.969433; `ANNOTATION SMOKE TEST PASSED`; saved JPEG |
+| D4-01 SSH and network recovery | **Complete** | Run Command checked socket/service/UFW; explicit ssh.service active + valid; old NSG source-IP restriction fixed by setting **My IP Address**; SSH login restored |
+| D4-02 Triton readiness and model config | **Complete** | HTTP 200; UINT8 dynamic NHWC input; max_batch_size=0; one CPU instance; 14 GiB available RAM |
+| D4-03 original resolution | **Complete** | 1546×1213 UINT8 inference HTTP 200; cat 0.804712, dog 0.505451; 73 ms individual client sample |
+| D4-04 ONNX nested resize and normalize trace | **Complete (target provenance partial)** | `Loop[7]/Resize` linear/asymmetric; initializer [300,300,3]; multiplier 0.007843138 and offset 1; exact dynamic target assembly not fully traced |
+| D4-05 A/B/C preprocessing comparison | **Complete** | Original A cat 0.804712; Pillow B dog 0.969433; NumPy asymmetric C cat 0.805172; pixel MAE 6.0871; both generated JPGs RGB 300×300 |
+| D4-06 sequential benchmark | **Complete — exploratory** | 300×300 30 calls p50 27.624ms, p95 30.251ms, 35.49 RPS; original 30 calls p50 43.938ms, p95 45.976ms, 22.19 RPS |
+| D4-07 concurrency benchmark | **Complete — exploratory** | 24 calls each, clients 1/2/4: 35.95/36.90/36.85 RPS; mean latency 27.473/52.682/100.722ms |
+| D4-08 documentation | **Repository updated** | Scripts and transcribed results committed directly to GitHub; VM-local output JSON not independently fetched |
+| Operations: Nov 13 Azure deallocation | **Pending verification** | Latest supplied logs show a running VM; never assume SSH disconnect deallocates it |
+| Next: metrics/queue profile; CPU instance scaling; multi-image evaluation | **Pending** | No performance counter, ground-truth metric, or instance-count comparison collected |
+
+## Next engineering phases and acceptance criteria
+
+| Phase | Exit evidence | Status |
+|---|---|---|
+| 00 Lab foundation | Isolated secure VM, restricted NSG, safe startup/shutdown | Functional; deallocation and auto-shutdown safeguards pending |
+| 01 Vision inference | Raw and real-image inference, visually inspected JPEG | Complete (functional smoke only) |
+| 02 Evaluation | Labeled multi-image dataset, IoU/precision/recall/mAP, error breakdown | Not started |
+| 03 Training | Versioned training dataset + actual training results | Not started |
+| 04 Model packaging | Reproducible export/contract tests | Partial: imported ONNX validation/preprocessing traced |
+| 05 Triton model serving | V2 HTTP + CPU ONNX Runtime inference | Complete baseline |
+| 06 Benchmarking | Warmed measured request latencies and concurrency results | Initial exploratory run complete; server metrics and repeats pending |
+| 07 Scaling/batching | Configured and measured instance count and valid batching strategy | Not started |
+| 08 Applied CV | Detection→cropping→embeddings→retrieval demo | Not started |
+| 09 Production | CI, metrics, deployment/rollback, secrets and cost safeguards | Not started |
+
+## Historical checkpoint ledger (statuses at the time)
+
 This file records **verified outcomes only**. Planned actions are explicitly marked pending. For detailed commands and evidence, follow the dated journal.
 
-## Current milestone — 2026-11-07 (Day 3)
+### Historical Day 3 snapshot — 2026-11-07 (not the latest status)
 
 **Stage:** First real photograph CPU inference **verified** on 2026-11-06 (HTTP 200, one candidate with raw class ID 18, score 0.969433). **Day 3 startup verified:** Azure VM hostname matched, Docker active, existing Triton container up, model-specific HTTP readiness 200, isolated Python + Pillow 11.3.0 import succeeded. Three connection resets occurred *during startup* before readiness succeeded; no current service failure observed. Native image resolution, COCO class ID 18 semantic mapping, and annotated output remain pending.
 
