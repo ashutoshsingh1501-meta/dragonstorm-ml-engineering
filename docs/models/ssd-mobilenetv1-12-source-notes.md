@@ -81,3 +81,13 @@ curl -i --max-time 10 http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready
 ```
 
 Output was `HTTP/1.1 200 OK` with empty body (`Content-Length: 0`). This confirms **model-specific Triton readiness** for `ssd_mobilenet_v1_12` at this checkpoint. **Not yet tested:** a real image input, output detections, class mappings, preprocessing correctness, bounding box rendering, latency, throughput, concurrency, or dynamic batching. The user paused work after this check. Stop/deallocation of the Azure VM is pending independent user confirmation.
+
+
+## Updated verified model-preprocessing evidence — 2026-11-13
+
+- Actual ONNX input `inputs` is UINT8 NHWC with symbolic N/H/W; Triton serving permits [-1,-1,-1,3], `max_batch_size=0`, one CPU instance. Original 1546×1213 photo ran successfully.
+- ONNX node `Loop[7]/Resize__142` is `linear` with `asymmetric` coordinate transform. Inner preprocessing path includes `Transpose`, `Shape`, `Gather`, `Slice`, `Concat`, `Resize`; initializer [300,300,3] strongly suggests 300×300 target, not a fully printed dimension proof.
+- Internal normalization `x*0.007843138 - 1` demonstrated from initializer values; do **not** additionally normalize externally.
+- Original-resolution path: cat (17) score 0.804712 and dog (18) 0.505451; Pillow 300×300 external resize: dog 0.969433; manually implemented NumPy asymmetric 300×300: cat 0.805172, dog 0.511881. A/C strongly agree; these are single-image predictions and not model-quality metrics.
+- [Full commands, caveats, annotation details and exploratory CPU benchmark](../journal/2026-11-13-triton-preprocessing-benchmark.md); [transcribed baseline JSON](../experiments/2026-11-13-cpu-baseline.json).
+- **Historical notes above retain the state at their own dates**, including old pending assertions. They must not be read as today's status. Licensing metadata discrepancy remains to be independently resolved before redistributing third-party assets.
