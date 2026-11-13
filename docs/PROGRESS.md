@@ -1,6 +1,6 @@
 # Engineering Progress Tracker
 
-> **Current state — November 13, 2026:** First real-image detection, COCO label mapping, annotation and visual inspection **verified**; ONNX internal preprocessing investigation and A/B/C prediction comparison **verified**; CPU loopback benchmark **completed**. The latest results are from 24–30 measured calls/configuration, not SLA-quality statistics. **VM final deallocation after the November 13 lab is not verified.** The original chronological milestone entries follow below and retain their *at-the-time* statuses; this current-state reconciliation supersedes stale “pending” text in older entries.
+> **Current state — November 13, 2026:** First real-image detection, COCO label mapping, annotation and visual inspection **verified**; ONNX internal preprocessing investigation and A/B/C prediction comparison **verified**; CPU loopback benchmark **completed**. The latest results are from 24–30 measured calls/configuration, not SLA-quality statistics. **VM final deallocation after the November 13 lab was verified by a user-supplied Azure Portal screenshot.** The original chronological milestone entries follow below and retain their *at-the-time* statuses; this current-state reconciliation supersedes stale “pending” text in older entries.
 
 **Evidence:** [Nov 12–13 lab journal](journal/2026-11-13-triton-preprocessing-benchmark.md) · [Measured results transcribed from terminal stdout](experiments/2026-11-13-cpu-baseline.json) · [Model notes](models/ssd-mobilenetv1-12-source-notes.md).
 
@@ -18,14 +18,14 @@
 | D4-06 sequential benchmark | **Complete — exploratory** | 300×300 30 calls p50 27.624ms, p95 30.251ms, 35.49 RPS; original 30 calls p50 43.938ms, p95 45.976ms, 22.19 RPS |
 | D4-07 concurrency benchmark | **Complete — exploratory** | 24 calls each, clients 1/2/4: 35.95/36.90/36.85 RPS; mean latency 27.473/52.682/100.722ms |
 | D4-08 documentation | **Repository updated** | Scripts and transcribed results committed directly to GitHub; VM-local output JSON not independently fetched |
-| Operations: Nov 13 Azure deallocation | **Pending verification** | Latest supplied logs show a running VM; never assume SSH disconnect deallocates it |
+| Operations: Nov 13 SSH exit and Azure deallocation | **Complete** | User supplied Windows PowerShell screenshot confirming SSH `exit`, `logout`, and local prompt; subsequent Azure VM Overview screenshot explicitly showed **Stopped (deallocated)**. No later restart indicated |
 | Next: metrics/queue profile; CPU instance scaling; multi-image evaluation | **Pending** | No performance counter, ground-truth metric, or instance-count comparison collected |
 
 ## Next engineering phases and acceptance criteria
 
 | Phase | Exit evidence | Status |
 |---|---|---|
-| 00 Lab foundation | Isolated secure VM, restricted NSG, safe startup/shutdown | Functional; deallocation and auto-shutdown safeguards pending |
+| 00 Lab foundation | Isolated secure VM, restricted NSG, safe startup/shutdown | Functional; Nov 13 manual deallocation verified, automatic shutdown safeguard pending |
 | 01 Vision inference | Raw and real-image inference, visually inspected JPEG | Complete (functional smoke only) |
 | 02 Evaluation | Labeled multi-image dataset, IoU/precision/recall/mAP, error breakdown | Not started |
 | 03 Training | Versioned training dataset + actual training results | Not started |
