@@ -81,8 +81,16 @@ Saved measured JSON on VM: `~/dragonstorm-lab/d4-triton-benchmark-results.json`.
 
 ## Follow-up and cost controls
 
-- VM was confirmed deallocated after November 7, **but November 13 final power state has not been supplied**. Stop/deallocate after today's work; SSH `exit` alone does not stop compute charges.
+- **November 13 final shutdown verified:** User supplied a PowerShell screenshot showing `exit`, `logout`, closed SSH connection and return to local `PS` prompt, plus a separate Azure Portal VM Overview screenshot showing **Stopped (deallocated)**. This confirms deallocation at the captured end-of-session checkpoint, rather than merely SSH logout. Managed disks and applicable networking resources may still incur charges.
 - Metrics endpoint was disabled in initial deployment; plan safe local-only Triton metrics/trace exposure and server-side queue/inference profiling as a separate experiment.
 - Check NSG source IP on every new home-ISP lease; never open SSH/inference broadly.
 - Recheck/upkeep the Ubuntu security updates in a separate controlled maintenance window.
 - Next: server-side statistics, multiple model instances under controlled configuration, longer benchmarks and multi-image labeled quality evaluation; dynamic batching requires explicit future compatibility research/changes.
+
+## End-of-session artifact and shutdown evidence — November 13
+
+- The final shared terminal log also shows that the local benchmark journal was written and `ls -lh` verified three VM-local artifacts: `benchmark_triton.py` (~6.1 KiB), `d4-triton-benchmark-results.json` (~1.4 KiB), and `docs/journal/2026-11-13-triton-benchmark.md` (~1.8 KiB). Shell printed `BENCHMARK DOCUMENTATION: COMPLETE`. These are filesystem existence checks, **not** a claim that the VM-generated files were pushed directly from the VM.
+- Repository scripts, technical journal and measured JSON transcription were separately committed via GitHub. The original VM JSON is still not byte-compared against the repository transcription.
+- Windows PowerShell screenshot: session ended with `exit`, `logout`, `Connection ... closed.`, and local `PS` prompt; this verifies clean SSH disconnect.
+- Azure Portal Overview screenshot: VM `vm-dragonstorm-ml-01` **Status: Stopped (deallocated)**; Azure compute deallocation at session end is **verified**. The screenshot does not establish zero ongoing storage/network costs or auto-shutdown configuration.
+- Next boot: check current source IP against the SSH NSG rule and restart/check Triton readiness. Do not assume the Azure VM is currently running.
