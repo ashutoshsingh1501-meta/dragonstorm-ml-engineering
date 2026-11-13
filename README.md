@@ -6,7 +6,7 @@ A public, hands-on engineering and learning journal covering the lifecycle of AI
 
 This is an **independent, greenfield lab** running on a personally owned Microsoft Azure subscription. It uses original project material, open-source tools, and public or synthetic data; it is not a reconstruction of any employer's proprietary systems.
 
-> **Latest verified checkpoint — Day 1, November 4, 2026:** Docker Engine installed; NVIDIA Triton 2.74.0 running in a CPU-only container; an SSD-MobileNetV1-12 ONNX model validated and successfully loaded by Triton's ONNX Runtime backend; **model-specific HTTP readiness returned 200 OK**. The Azure VM was **Stopped (deallocated)** at the end of the session. **Actual image inference, prediction quality, and performance benchmarks are not yet tested.**
+> **Latest verified checkpoint — November 13, 2026:** Real-image Triton CPU inference and annotated dog JPEG validated; ONNX-internal asymmetric resizing and pixel normalization investigated; A/B/C preprocessing experiment completed; first sequential and concurrency CPU benchmark completed. **300×300 baseline:** p50 **27.624 ms**, p95 **30.251 ms**, throughput **35.49 RPS** (30 requests). At 1/2/4 concurrent clients throughput ~**35.95/36.90/36.85 RPS** while mean latency rose ~**27.5/52.7/100.7 ms**. Exploratory local-only measurements, not production benchmarks. Azure VM **final Nov 13 deallocation not verified**. See [tracker](docs/PROGRESS.md), [journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md), [benchmark results](docs/experiments/2026-11-13-cpu-baseline.json).
 
 ## Current lab architecture
 
@@ -71,32 +71,31 @@ The model binary is downloaded to the lab VM, not committed to this public repos
 
 ## Roadmap
 
-The roadmap tracks **observable outcomes**, not only tools installed. Work can overlap phases, but incomplete inference or evaluations are never marked complete.
+See the full [phase/milestone tracker](docs/PROGRESS.md). Each phase has a testable evidence boundary.
 
-| Phase | Target outcome | Status after Day 1 |
+| Phase | Outcome | Status as of Nov 13 |
 | --- | --- | --- |
-| 00 — Lab foundation | Personal Azure, secure access, cost controls, VM/Docker setup | **Initial bootstrap complete**; auto-shutdown restoration pending |
-| 01 — First vision inference | Run a public vision model and inspect real prediction outputs | **In progress**; ONNX model deployed and ready, inference pending |
-| 02 — Model evaluation | Public/synthetic examples, baseline quality, failure analysis | Not started |
-| 03 — Model training | Train or fine-tune a small model; track experiments | Not started |
-| 04 — Model packaging | ONNX validation; preprocessing/postprocessing contract and export workflow | **Partially started**; imported ONNX graph validated, remaining work pending |
-| 05 — Triton serving | CPU model load, HTTP readiness, and actual end-to-end inference | **In progress**; load/readiness passed, inference pending |
-| 06 — Performance engineering | p50/p95/p99 latency, throughput and errors at varying concurrency | Not started |
-| 07 — Batching and scaling | Batching on/off, utilization and scaling decisions | Not started |
-| 08 — Applied CV pipeline | Detection → crops → embeddings → vector similarity | Not started |
-| 09 — Production hardening | CI/CD, observability, security, versioning, recovery/rollback | Not started |
+| 00 Lab foundation | Personal Azure, safe SSH, Docker, cost discipline | VM/Docker/SSH working; auto-shutdown setup and Nov 13 final deallocation **unverified** |
+| 01 First vision inference | Real detection output + visualization | **Functional smoke test complete**, single dog photo annotated |
+| 02 Model evaluation | Multi-image labels, IoU, precision/recall/mAP and failure analysis | **Not started** |
+| 03 Model training | Train or tune a model, tracked experiment | **Not started** |
+| 04 Packaging & contracts | Model provenance, ONNX and preprocessing interpretation | **Partial**: artifact/graph checked; internal normalization and resize traced; no end-to-end export workflow |
+| 05 Triton serving | ONNX Runtime CPU model, V2 HTTP, output decoding | **Functional baseline complete** |
+| 06 Performance engineering | Warmed client latency percentiles, throughput and concurrency | **First exploratory CPU benchmark complete**; longer and server-side measurement pending |
+| 07 Batching and scaling | Compare instance count, batching and resource use | **Not started**; config currently max_batch_size=0 |
+| 08 Applied CV pipeline | Detection→crop→embedding→retrieval | Not started |
+| 09 Production hardening | Metrics, security, IaC, CI, rollback | Not started |
 
-## Next session — Day 2
+## Next session — server-side profiling & evaluation
 
-**Resume at the first real CPU inference test.** The VM was deallocated at the end of Day 1. After starting it again, reconnect via SSH, inspect/resume the retained `triton-cpu` Docker container, and recheck model readiness before sending an inference request.
+1. Confirm safe VM startup, effective current-client-IP SSH NSG, Docker and model readiness.
+2. Capture Triton model inference statistics/queue-versus-compute timing and CPU utilization; initial Triton metrics were disabled, so configuration changes require a distinct controlled experiment.
+3. Compare one versus multiple CPU model instances without overwriting the measured single-instance configuration or claiming dynamic batching.
+4. Repeat larger-sample benchmarks with controlled warm-ups/traffic; only compare like-for-like request sizes and methodology.
+5. Collect labeled test images to validate class quality and boxes; a correct result on one dog photo does not establish model accuracy.
+6. Deallocate Azure VM after use and **verify** the Azure power state.
 
-1. Construct a controlled image tensor following the verified **UINT8 NHWC** model input schema and confirm any required preprocessing.
-2. Send a request to Triton's localhost **V2 inference** endpoint.
-3. Inspect the four returned detection tensors and validate their shapes and values.
-4. Only after observing actual predictions, decode class labels and render bounding boxes.
-5. Defer batching, load testing, GPU comparisons and benchmarks until a reproducible baseline exists.
-
-**Working rule:** One command or configuration action → review the user's actual output → document and commit the verified result → proceed to the next action. Never label an untested hypothesis as a result.
+**Working rule:** Preserve real terminal outputs, note failures as well as passes, keep public repository free of private keys/account IDs/private IPs, and clearly label hypotheses.
 
 ## Why this project?
 
@@ -126,37 +125,58 @@ Each experiment should answer:
 
 ## Engineering evidence and reproducibility
 
-The authoritative records are the **verified milestone tracker** and **chronological engineering journal**, including failures, corrective actions, exact commands and observed results.
+The authoritative records are the **verified milestone tracker** and **chronological engineering journal**, including failures, corrective actions, exact commands and observed results. [Nov 12–13 preprocessing and CPU benchmark journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md) and [terminal-transcribed JSON](docs/experiments/2026-11-13-cpu-baseline.json) are the latest records.
 
 - [Progress tracker](docs/PROGRESS.md)
 - [Day 1: Azure, Docker, Triton and ONNX bootstrap journal](docs/journal/2026-11-04-azure-bootstrap.md)
+- [Day 2: First inference client and real-photo test](docs/journal/2026-11-06-day-2.md)
+- [Day 3: COCO class mapping and annotation setup](docs/journal/2026-11-07-day-3.md)
+- [Nov 12–13: Preprocessing, annotation and CPU benchmarks](docs/journal/2026-11-13-triton-preprocessing-benchmark.md)
 - [ADR-001: Personal Azure cloud-first decision](docs/decisions/ADR-001-personal-azure-cloud-first.md)
 - [SSD-MobileNetV1-12 source and verification notes](docs/models/ssd-mobilenetv1-12-source-notes.md)
 
 Experiment records distinguish **observations**, **inferences**, and **hypotheses**. Performance measurements will include hardware, inputs, units, baselines and uncertainty. CPU-only results will not be presented as representative GPU production benchmarks.
 
-### Repository layout (implemented and planned)
+### Repository layout (implemented)
 
 ```text
 README.md
 docs/
-  PROGRESS.md                               # Verified milestone tracker
-  decisions/
-    ADR-001-personal-azure-cloud-first.md
+  PROGRESS.md
+  decisions/ADR-001-personal-azure-cloud-first.md
   journal/
-    2026-11-04-azure-bootstrap.md           # Day 1 command/output journal
-  models/
-    ssd-mobilenetv1-12-source-notes.md      # Model research and evidence
-model_repository/
-  ssd_mobilenet_v1_12/
-    config.pbtxt                            # Triton config only (no model weights)
-
-# To be added when backed by real experiments:
-src/                                        # Original inference/pipeline code
-scripts/                                    # Repeatable setup and test commands
-tests/                                      # Functional/integration/evaluation tests
-docs/experiments/                           # Results and methods
+    2026-11-04-azure-bootstrap.md
+    2026-11-06-day-2.md
+    2026-11-07-day-3.md
+    2026-11-13-triton-preprocessing-benchmark.md
+  models/ssd-mobilenetv1-12-source-notes.md
+  experiments/2026-11-13-cpu-baseline.json
+model_repository/ssd_mobilenet_v1_12/config.pbtxt
+scripts/
+  first_triton_inference.py
+  real_photo_triton_inference.py
+  annotate_triton_detection.py
+  original_resolution_inference.py
+  compare_preprocessing.py
+  inspect_onnx_preprocessing.py
+  benchmark_triton.py
 ```
+
+**Artifacts kept on VM, not GitHub:** downloaded third-party ONNX model binary, test JPEG, annotated output JPEG, COCO label map, local virtualenv, original benchmark JSON and experimental visual JPG outputs. Repository JSON is explicitly a transcription from terminal stdout.
+
+## Reproducing the verified experiment
+
+On an authorized Azure VM session with Docker and the locally provisioned model ready:
+
+```bash
+curl -fsS http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/ready
+~/dragonstorm-lab/.venv-onnx-inspect/bin/python ~/dragonstorm-lab/annotate_triton_detection.py
+~/dragonstorm-lab/.venv-onnx-inspect/bin/python ~/dragonstorm-lab/original_resolution_inference.py
+~/dragonstorm-lab/.venv-onnx-inspect/bin/python ~/dragonstorm-lab/compare_preprocessing.py
+~/dragonstorm-lab/.venv-onnx-inspect/bin/python ~/dragonstorm-lab/benchmark_triton.py
+```
+
+Copy the version-controlled scripts into `~/dragonstorm-lab/` on the VM, so imports of `real_photo_triton_inference.py` work. A full environment installer and CI tests are not yet provided. For checked commands, interpretation, A/B/C observations, and caveats see the [Nov 12–13 journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md).
 
 ## Publication and responsible use
 
@@ -171,5 +191,5 @@ docs/experiments/                           # Results and methods
 This lab provides a foundation for engineering write-ups on model provenance, reproducibility, CPU vs. GPU trade-offs, inference-serving choices, batching and performance measurements — once those experiments have been performed.
 
 **Maintainer:** Ashutosh Singh  
-**Status:** Day 1 bootstrap complete; first real inference pending (as of 2026-11-04)  
+**Status:** First functional Triton detection + annotation and exploratory CPU benchmarks completed (as of 2026-11-13)  
 **License:** MIT for original repository content; third-party assets retain their own terms.
