@@ -1,0 +1,63 @@
+{
+  "source": "Transcribed from user-provided Azure VM benchmark stdout on 2026-11-13; not downloaded from VM or byte-verified against its local JSON artifact.",
+  "model": "ssd_mobilenet_v1_12",
+  "platform": "Triton 2.74.0, ONNX Runtime, CPU single instance, loopback HTTP",
+  "warmup": 5,
+  "results": [
+    {
+      "test": "pillow_300_sequential",
+      "requests": 30,
+      "mean_ms": 27.903,
+      "p50_ms": 27.624,
+      "p95_ms": 30.251,
+      "p99_ms": 31.144,
+      "min_ms": 26.883,
+      "max_ms": 31.391,
+      "throughput_rps": 35.49
+    },
+    {
+      "test": "original_resolution_sequential",
+      "requests": 30,
+      "mean_ms": 44.025,
+      "p50_ms": 43.938,
+      "p95_ms": 45.976,
+      "p99_ms": 46.201,
+      "min_ms": 41.936,
+      "max_ms": 46.278,
+      "throughput_rps": 22.19
+    },
+    {
+      "test": "pillow_300_concurrency_1",
+      "requests": 24,
+      "mean_ms": 27.473,
+      "p50_ms": 27.744,
+      "p95_ms": 27.984,
+      "p99_ms": 28.039,
+      "min_ms": 26.732,
+      "max_ms": 28.052,
+      "throughput_rps": 35.95
+    },
+    {
+      "test": "pillow_300_concurrency_2",
+      "requests": 24,
+      "mean_ms": 52.682,
+      "p50_ms": 53.717,
+      "p95_ms": 55.756,
+      "p99_ms": 58.31,
+      "min_ms": 28.93,
+      "max_ms": 59.069,
+      "throughput_rps": 36.9
+    },
+    {
+      "test": "pillow_300_concurrency_4",
+      "requests": 24,
+      "mean_ms": 100.722,
+      "p50_ms": 106.804,
+      "p95_ms": 109.736,
+      "p99_ms": 109.776,
+      "min_ms": 31.06,
+      "max_ms": 109.787,
+      "throughput_rps": 36.85
+    }
+  ]
+}
