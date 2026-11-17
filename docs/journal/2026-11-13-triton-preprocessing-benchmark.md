@@ -94,3 +94,15 @@ Saved measured JSON on VM: `~/dragonstorm-lab/d4-triton-benchmark-results.json`.
 - Windows PowerShell screenshot: session ended with `exit`, `logout`, `Connection ... closed.`, and local `PS` prompt; this verifies clean SSH disconnect.
 - Azure Portal Overview screenshot: VM `vm-dragonstorm-ml-01` **Status: Stopped (deallocated)**; Azure compute deallocation at session end is **verified**. The screenshot does not establish zero ongoing storage/network costs or auto-shutdown configuration.
 - Next boot: check current source IP against the SSH NSG rule and restart/check Triton readiness. Do not assume the Azure VM is currently running.
+
+## Documentation handoff prepared — November 17, 2026 (no new lab execution)
+
+A follow-up review checked this journal, the latest milestone tracker, README, VM operations guide, and preserved CPU baseline JSON. **No new SSH session, Triton HTTP response, server-side statistics, or CPU-instance scaling run has been supplied since the Nov 13 shutdown.**
+
+- A separate [Day 5 handoff](2026-11-17-day-5-handoff.md) records environment and model contracts, measured D4 baselines, the key preprocessing inference (A/C agreement versus Pillow B), unresolved questions and explicit acceptance checks.
+- [`scripts/d5_triton_stats_snapshot.sh`](../../scripts/d5_triton_stats_snapshot.sh) is a new read-only helper that captures model statistics before/after future benchmarks. It is **authored and committed, but not tested on the deallocated VM**; avoid claiming otherwise.
+- Day 5 should start with power-on and restricted NSG check, Docker and readiness verification, then `GET /v2/models/ssd_mobilenet_v1_12/stats`. The V2 statistics endpoint should be tested separately from Prometheus metrics; initial Prometheus metrics were disabled.
+- Preserve the current one-instance CPU configuration for comparison, then collect queue/compute counter **deltas** and CPU utilization before considering multiple instances.
+- The annotated image and original benchmark JSON remain on VM. No private Azure or SSH identifiers were added to the public repo.
+
+**Documentation status:** Previous executed observations and shutdown verification unchanged. Next experiment D5-00 / D5-01 **pending**.
