@@ -8,6 +8,8 @@ This is an **independent, greenfield lab** running on a personally owned Microso
 
 > **Latest verified checkpoint — November 13, 2026:** Real-image Triton CPU inference and annotated dog JPEG validated; ONNX-internal asymmetric resizing and pixel normalization investigated; A/B/C preprocessing experiment completed; first sequential and concurrency CPU benchmark completed. **300×300 baseline:** p50 **27.624 ms**, p95 **30.251 ms**, throughput **35.49 RPS** (30 requests). At 1/2/4 concurrent clients throughput ~**35.95/36.90/36.85 RPS** while mean latency rose ~**27.5/52.7/100.7 ms**. Exploratory local-only measurements, not production benchmarks. Azure VM **Nov 13 deallocation verified in Azure Portal**. See [tracker](docs/PROGRESS.md), [journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md), [benchmark results](docs/experiments/2026-11-13-cpu-baseline.json).
 
+**Documentation review — November 17, 2026:** The last *executed* experiment remains the November 13 Triton CPU benchmark; no Day 5 profiling has been executed. The [Day 5 handoff](docs/journal/2026-11-17-day-5-handoff.md) now preserves the complete verified baseline, restart conditions, pending questions, and a read-only [model statistics snapshot helper](scripts/d5_triton_stats_snapshot.sh) (authored but not run on Azure).
+
 ## Current lab architecture
 
 ```text
@@ -88,6 +90,9 @@ See the full [phase/milestone tracker](docs/PROGRESS.md). Each phase has a testa
 
 ## Next session — server-side profiling & evaluation
 
+**Current handoff:** [November 17 Day 5 plan (not executed)](docs/journal/2026-11-17-day-5-handoff.md). First action: reconnect securely, verify model readiness and capture model statistics before any configuration changes. [Stats helper](scripts/d5_triton_stats_snapshot.sh) is new and untested on VM.
+
+
 1. Confirm safe VM startup, effective current-client-IP SSH NSG, Docker and model readiness.
 2. Capture Triton model inference statistics/queue-versus-compute timing and CPU utilization; initial Triton metrics were disabled, so configuration changes require a distinct controlled experiment.
 3. Compare one versus multiple CPU model instances without overwriting the measured single-instance configuration or claiming dynamic batching.
@@ -133,6 +138,7 @@ The authoritative records are the **verified milestone tracker** and **chronolog
 - [Day 2: First inference client and real-photo test](docs/journal/2026-11-06-day-2.md)
 - [Day 3: COCO class mapping and annotation setup](docs/journal/2026-11-07-day-3.md)
 - [Nov 12–13: Preprocessing, annotation and CPU benchmarks](docs/journal/2026-11-13-triton-preprocessing-benchmark.md)
+- [Nov 17: Day 5 profiling handoff (planned, not run)](docs/journal/2026-11-17-day-5-handoff.md)
 - [ADR-001: Personal Azure cloud-first decision](docs/decisions/ADR-001-personal-azure-cloud-first.md)
 - [SSD-MobileNetV1-12 source and verification notes](docs/models/ssd-mobilenetv1-12-source-notes.md)
 
@@ -164,6 +170,7 @@ scripts/
   benchmark_triton.py
   check_triton_lab.sh
   diagnose_ssh_guest.sh
+  d5_triton_stats_snapshot.sh              # Planned, not run on Azure
 ```
 
 **Artifacts kept on VM, not GitHub:** downloaded third-party ONNX model binary, test JPEG, annotated output JPEG, COCO label map, local virtualenv, original benchmark JSON and experimental visual JPG outputs. Repository JSON is explicitly a transcription from terminal stdout.
