@@ -106,3 +106,13 @@ A follow-up review checked this journal, the latest milestone tracker, README, V
 - The annotated image and original benchmark JSON remain on VM. No private Azure or SSH identifiers were added to the public repo.
 
 **Documentation status:** Previous executed observations and shutdown verification unchanged. Next experiment D5-00 / D5-01 **pending**.
+
+## Experiment diagrams added to GitHub — November 17 (documentation only)
+
+The three concept images made during the learning conversation have been recreated as repository-hosted SVG illustrations, and embedded in the [visual architecture guide](../ARCHITECTURE.md):
+
+![End-to-end Triton HTTP V2 JPEG inference pipeline, black and white](../images/triton-inference-pipeline-bw.svg)
+
+The [infrastructure architecture](../ARCHITECTURE.md#2-infrastructure-architecture) depicts Windows SSH to Azure, a Dockerized Triton server, the ONNX Runtime CPU backend and the versioned model repository. The [experiment overview](../ARCHITECTURE.md#1-experiment-overview--why-this-matters-for-cat-eye) describes verified steps, observed CPU baseline and relevance to future Cat-Eye discussions.
+
+These SVGs preserve the concepts in the original chat-generated PNG diagrams, but are **not** byte-identical binary copies. They were added solely as documentation; all existing measured results and experiment states remain unchanged. Private Azure Portal screenshots, SSH terminal account details and the third-party example photograph have not been published.
