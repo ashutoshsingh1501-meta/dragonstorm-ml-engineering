@@ -71,6 +71,15 @@ Symbolic ONNX dimensions are represented as `-1` in the initial Triton configura
 
 The model binary is downloaded to the lab VM, not committed to this public repository. Review third-party model licenses and usage terms before redistribution.
 
+## Visual architecture and inference diagrams
+
+The three diagrams from our learning session are preserved as **recreated SVG images** in the public repository. For detailed explanations and limitations, see the [complete visual architecture guide](docs/ARCHITECTURE.md) or [image asset catalog](docs/images/README.md).
+
+![Triton hands-on experiment and relevance to Cat-Eye](docs/images/triton-experiment-cat-eye-overview.svg)
+
+- [Azure infrastructure architecture](docs/ARCHITECTURE.md#2-infrastructure-architecture) — Windows SSH, VM, Docker, Triton, ONNX CPU and versioned model repository.
+- [Black-and-white end-to-end inference pipeline](docs/ARCHITECTURE.md#3-end-to-end-image-inference-flow-black-and-white) — JPEG → Python → Triton V2 → SSD-MobileNet → detection tensors → annotated JPEG.
+
 ## Roadmap
 
 See the full [phase/milestone tracker](docs/PROGRESS.md). Each phase has a testable evidence boundary.
@@ -133,6 +142,8 @@ Each experiment should answer:
 The authoritative records are the **verified milestone tracker** and **chronological engineering journal**, including failures, corrective actions, exact commands and observed results. [Nov 12–13 preprocessing and CPU benchmark journal](docs/journal/2026-11-13-triton-preprocessing-benchmark.md) and [terminal-transcribed JSON](docs/experiments/2026-11-13-cpu-baseline.json) are the latest records.
 
 - [Progress tracker](docs/PROGRESS.md)
+- [All concept diagrams and architecture explanation](docs/ARCHITECTURE.md)
+- [Diagram gallery and provenance](docs/images/README.md)
 - [Operations, SSH recovery, reproducible commands and cost controls](docs/OPERATIONS.md)
 - [Day 1: Azure, Docker, Triton and ONNX bootstrap journal](docs/journal/2026-11-04-azure-bootstrap.md)
 - [Day 2: First inference client and real-photo test](docs/journal/2026-11-06-day-2.md)
