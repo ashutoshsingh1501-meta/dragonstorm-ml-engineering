@@ -20,6 +20,16 @@
 
 **Open follow-up:** [Phase 00 Azure cost/safeguards issue #1](https://github.com/ashutoshsingh1501-meta/dragonstorm-ml-engineering/issues/1). Automatic shutdown re-enablement, Ubuntu security updates, labeled-image quality evaluation, exact ONNX resize target provenance, and VM-JSON byte comparison remain open. Historic progress entries below retain their at-the-time state.
 
+## Visual documentation — available in GitHub
+
+The three concept diagrams created during the lab discussion are preserved as lightweight SVG reconstructions in the [architecture and inference guide](ARCHITECTURE.md), with an [asset catalog](images/README.md):
+
+- [Whole experiment and future Cat-Eye relevance](ARCHITECTURE.md#1-experiment-overview--why-this-matters-for-cat-eye)
+- [Azure VM/Docker/Triton/ONNX infrastructure](ARCHITECTURE.md#2-infrastructure-architecture)
+- [End-to-end image inference pipeline (black and white)](ARCHITECTURE.md#3-end-to-end-image-inference-flow-black-and-white)
+
+**Documentation-only addition:** Diagram assets do **not** constitute newly executed experiment evidence. Original generated PNGs are not bit-for-bit uploaded to the GitHub repository; this version tracks semantically equivalent SVG illustrations. No sensitive Azure screenshots or third-party dog photograph were added.
+
 ## Current reconciled checkpoints
 
 | ID | Actual status | Evidence |
