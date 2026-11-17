@@ -4,6 +4,22 @@
 
 **Evidence:** [Nov 12–13 lab journal](journal/2026-11-13-triton-preprocessing-benchmark.md) · [Measured results transcribed from terminal stdout](experiments/2026-11-13-cpu-baseline.json) · [Model notes](models/ssd-mobilenetv1-12-source-notes.md).
 
+## Latest documentation reconciliation — 2026-11-17
+
+**Last executed lab: November 13 (D4-07).** GitHub documentation and handoff were refreshed November 17, **without new Azure inference, profiling, or scaling execution**. The latest observed VM power state is November 13 **Stopped (deallocated)**, not a live verification of its present power state.
+
+| Checkpoint | Status | Next evidence required |
+|---|---|---|
+| D4-09 Nov 13 terminal journal and power-state verification | **Complete** | Benchmark JSON, VM-local script and VM-local journal confirmed to exist; Azure portal screenshot showed Stopped (deallocated) after SSH logout |
+| D5-00 Safe startup and Triton configuration re-verification | **Not executed** | User-provided Azure start + SSH + current NSG source IP + model readiness HTTP 200 |
+| D5-01 Model Statistics API baseline | **Not executed** | HTTP response from `/v2/models/ssd_mobilenet_v1_12/stats` and saved raw JSON |
+| D5-02 Queue/compute stats under controlled load and CPU utilization | **Not executed** | Before/after counters, workload parameters and utilization trace |
+| D5-03 Compare 1 vs 2 CPU model instances | **Not executed** | Reversible config + consistent benchmark comparison + errors |
+| D5-04 Closeout docs for executed profiling | **Not executed** | New dated execution journal and reviewed results |
+| D5 handoff document and read-only snapshot script | **Committed; unexecuted** | [Nov 17 handoff](journal/2026-11-17-day-5-handoff.md) · [stats snapshot helper](../scripts/d5_triton_stats_snapshot.sh) |
+
+**Open follow-up:** [Phase 00 Azure cost/safeguards issue #1](https://github.com/ashutoshsingh1501-meta/dragonstorm-ml-engineering/issues/1). Automatic shutdown re-enablement, Ubuntu security updates, labeled-image quality evaluation, exact ONNX resize target provenance, and VM-JSON byte comparison remain open. Historic progress entries below retain their at-the-time state.
+
 ## Current reconciled checkpoints
 
 | ID | Actual status | Evidence |
