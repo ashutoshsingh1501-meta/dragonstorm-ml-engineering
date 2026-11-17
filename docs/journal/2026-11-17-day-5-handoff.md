@@ -80,3 +80,7 @@ Commit a dated executed journal **only after user-provided command output**, inc
 - Azure auto-shutdown restoration remains unverified; cloud compute incurs cost while allocated.
 
 **Handoff decision (as of 2026-11-17):** **Begin D5-00 and D5-01 next.** No fresh benchmark, stats response or scaling result has been observed since 2026-11-13.
+
+## Supporting visual diagrams
+
+The repository now contains three SVG reconstructions of the experiment visuals: [overview for Cat-Eye discussions](../ARCHITECTURE.md#1-experiment-overview--why-this-matters-for-cat-eye), [Azure infrastructure](../ARCHITECTURE.md#2-infrastructure-architecture), and [black-and-white image inference flow](../ARCHITECTURE.md#3-end-to-end-image-inference-flow-black-and-white). See [asset catalog](../images/README.md). These are explanatory illustrations, **not newly executed Triton experiments**.
