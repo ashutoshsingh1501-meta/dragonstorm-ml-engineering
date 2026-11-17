@@ -56,3 +56,18 @@ An HTTP 200 readiness probe verifies model status, **not** model correctness. Tr
 3. In Azure Portal **Stop (deallocate)** and verify **Stopped (deallocated)**. SSH exit alone leaves billing compute active. November 13 end-state was **verified** by an Azure Portal screenshot showing **Stopped (deallocated)** after the user closed the SSH session; always repeat this verification after future sessions.
 4. Restore a safe auto-shutdown policy if desired; original ADR proposed 20:00 IST but evidence shows it was turned off during bootstrap. No claim that it has been restored.
 5. Ubuntu Nov 12 banner reported 14 available updates (12 standard security). Schedule controlled upgrade/reboot/health recheck rather than changing packages during timed benchmarking.
+
+## Next-session profiling handoff (planned — 2026-11-17)
+
+The last tested run was **November 13**; the VM was verified deallocated afterwards. The [Day 5 handoff](journal/2026-11-17-day-5-handoff.md) and read-only [Triton stats snapshot script](../scripts/d5_triton_stats_snapshot.sh) are now in GitHub, but **have not been executed on the VM**.
+
+After safe restart and HTTP 200 readiness, the first no-change check is:
+
+```bash
+curl -fsS http://127.0.0.1:8000/v2/models/ssd_mobilenet_v1_12/stats \
+  | ~/dragonstorm-lab/.venv-onnx-inspect/bin/python -m json.tool
+```
+
+To save a dated snapshot, first download the repository script onto the VM (GitHub commits do **not** update VM files), then run `bash ~/dragonstorm-lab/d5_triton_stats_snapshot.sh before` and later `... after` around controlled benchmark traffic. The script queries the existing localhost stats endpoint; it does not change Triton instance count or enable public ports.
+
+Next decision follows actual server statistics, not a priori assumptions about queue saturation. Keep optional Prometheus metrics, instance scaling, GPU, and batching modifications as explicit later experiments. Preserve per-session Azure deallocation proof.
